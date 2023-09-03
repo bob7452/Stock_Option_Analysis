@@ -5,17 +5,17 @@ from wallstreet import Stock,Call,Put
 from datetime import datetime
 
 
-def savefile(df,date):
+def savefile(df,name,date):
 
     today_date = datetime.today().strftime('%Y-%m-%d')
     Path = "/media/ponder/ADATA HM900/OptionData/"
-    Path = Path+today_date+"/"
+    Path = Path+"/"+name+"/"+today_date+"/"+date+"/"
     directory = os.path.dirname(Path)
 
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    Path = Path + date + "_" + "OptionData.csv"
+    Path = Path + "OptionData.csv"
     df.to_csv(Path, index=False)
 
 if __name__ == "__main__":
@@ -57,6 +57,6 @@ if __name__ == "__main__":
                 print(f"==== Process {index+1}/{total} ====")
 
             print(allDF.to_string(index=False))
-            savefile(allDF,date)
+            savefile(allDF,name,date)
             print("")
             print("========================================")
