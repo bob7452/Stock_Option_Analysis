@@ -5,7 +5,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Run Auto Mode")
 
-        Stock = ["QQQ","SPY","AAPL","MSFT","GOOG","META","AMZN","TSLA","NVDA","TLT","^Vix","SOXX"]
+        Stock = ["QQQ","SPY","DIA","IWM","AAPL","MSFT","GOOG","META","AMZN","TSLA","NVDA","TLT","^Vix","SOXX"]
         Type   = ["C","P"]
         
         for Name in Stock:
