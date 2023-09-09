@@ -1,62 +1,19 @@
 import sys
-import pandas as pd
-import os 
-from wallstreet import Stock,Call,Put
-from datetime import datetime
-
-
-def savefile(df,name,date):
-
-    today_date = datetime.today().strftime('%Y-%m-%d')
-    Path = "/media/ponder/ADATA HM900/OptionData/"
-    Path = Path+"/"+name+"/"+today_date+"/"+date+"/"
-    directory = os.path.dirname(Path)
-
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    Path = Path + "OptionData.csv"
-    df.to_csv(Path, index=False)
+import DownLoad 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 1:
-        print("Key in Stock Name")
+    if len(sys.argv) < 2:
+        print("Run Auto Mode")
+
+        Stock = ["QQQ","SPY","AAPL","MSFT","GOOG","META","AMZN","TSLA","NVDA","TLT","^Vix","SOXX"]
+        Type   = ["C","P"]
+        
+        for Name in Stock:
+            for dT in Type:
+                DownLoad.DownLoad_Data(Name,dT)
+
     else:
         name = sys.argv[1]
-        print("Stock Name : " + name)
-        
-        stock = Call(name)
-        
-        for date in stock.expirations:
-
-            allDF = pd.DataFrame()
-            day,mom,year = date.split("-")
-            day = int(day)
-            mom = int(mom)
-            year = int(year)
-            
-            print("========= "+ name +" - "+ date +" =========")
-            total = len(stock.strikes)
-
-            for index, price in enumerate(stock.strikes):
-                price = int(price)
-                temp = Call(name,d = day, m = mom, y= year,strike = price)
-
-                data = { 'Date'  : [date],
-                        'Strike' : [price],
-                        'OI' : [temp.open_interest],
-                        'IV' : [temp.implied_volatility()],
-                        'Delta' : [temp.delta()],
-                        'Gamma' : [temp.gamma()],
-                        'Theta' : [temp.theta()],
-                        }
-                df = pd.DataFrame(data)
-                allDF = pd.concat([allDF,df])
-
-
-                print(f"==== Process {index+1}/{total} ====")
-
-            print(allDF.to_string(index=False))
-            savefile(allDF,name,date)
-            print("")
-            print("========================================")
+        dT   = sys.argv[2]
+        print(name +" / "+dT)
+        DownLoad.DownLoad_Data(name,dT)
