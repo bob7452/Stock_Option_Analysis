@@ -2,6 +2,7 @@ import pandas as pd
 import os 
 from datetime import datetime
 import yfinance as yf
+import yahooquery as yfq
 from bsm import RiskBSM
 from RIskRate import Rate
 import numpy as np
@@ -72,7 +73,7 @@ def DownLoad_OptionBar(name,price,dT,exp_date,Interval="1m"):
     today_date = datetime.today().strftime('%Y-%m-%d')
     Name = CombineOptionName(name,price,dT,exp_date)
     Path = Path+"/"+today_date+"/"+name+"/"+dT+"/"+exp_date+"/"+Name+".csv"
-    kBar = yf.download(tickers=Name, period="1d", interval=Interval)
+    kBar = yf.download(tickers=Name, period="3d", interval=Interval)
     savefile(kBar,Path,True)
 
 def DownLoad_Option(name,dT):
@@ -136,8 +137,8 @@ def DownLoad_Option(name,dT):
             df = pd.DataFrame(data)
             allDF = pd.concat([allDF,df])
 
-            if volume != 0:
-                DownLoad_OptionBar(name,price,dT,exp_date) 
+            # if volume != 0:
+            #     DownLoad_OptionBar(name,price,dT,exp_date) 
             print(f"==== Process {index+1}/{total} ====")
 
         print(allDF.to_string(index=False))
