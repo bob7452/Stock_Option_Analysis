@@ -6,23 +6,14 @@ from bsm import RiskBSM
 from RIskRate import Rate
 import numpy as np
 
-def savefile(df,dT,name,date):
+def savefile(df,FilePath,findex = False):
 
-    if dT == "C":
-        dT = "CALL"
-    else:
-        dT = "PUT"
-
-    today_date = datetime.today().strftime('%Y-%m-%d')
-    Path = "/media/ponder/ADATA HM900/OptionData/"
-    Path = Path+"/"+dT+"/"+name+"/"+today_date+"/"+date+"/"
-    directory = os.path.dirname(Path)
+    directory = os.path.dirname(FilePath)
 
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    Path = Path + "OptionData.csv"
-    df.to_csv(Path, index=False)
+    df.to_csv(FilePath, index=findex)
 
 def ExDays(date):
     year,mom,day = date.split("-")
@@ -35,12 +26,57 @@ def ExDays(date):
     time_interval = specified_date - current_date
     years = time_interval.days / 365.0
 
-    return years
+    return years    
 
-def DownLoad_Data(name,dT):
-    print("Stock Name : " + name + " " + dT)
+def specialName(name):
+    if name == "^Vix":
+        return "VIXW"
+    else:
+        return str(name)
 
-    # Model Select
+def CombineOptionName(name,price,optionType,ExDate):
+    
+    fNumber = int(price * 1000)
+    fNumber = f'{fNumber:08d}'
+    name    = specialName(name)
+    date_string = ExDate
+    date_object = datetime.strptime(date_string, "%Y-%m-%d")
+    formatted_date = date_object.strftime("%y%m%d")
+
+    contractName = name+formatted_date+optionType+fNumber
+    print(f"contractName = {contractName}")
+    return contractName
+
+def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
+
+    if DLType == 0:
+        print("Start Download Option Data")
+        DownLoad_Option(name,OptionType)
+    elif DLType == 1:
+        print(f"Start Download Stock Data , Iterval ={Iterval}")
+        DownLoad_StockBar(name,Iterval)
+    else:
+        print(f"Start Download Stock & Option Data , Iterval = {Iterval}")
+        DownLoad_Option(name,OptionType)
+        DownLoad_StockBar(name,Iterval)
+
+def DownLoad_StockBar(name,Interval="1m"):
+    Path = "/media/ponder/ADATA HM900/StockPriceData/"
+    today_date = datetime.today().strftime('%Y-%m-%d')
+    Path = Path+"/"+today_date+"/"+name+"/"+"Data.csv"
+    kBar = yf.download(tickers = name, period="1d", interval=Interval)
+    savefile(kBar,Path,True)
+
+def DownLoad_OptionBar(name,price,dT,exp_date,Interval="1m"):
+    Path = "/media/ponder/ADATA HM900/StockPriceData/"
+    today_date = datetime.today().strftime('%Y-%m-%d')
+    Name = CombineOptionName(name,price,dT,exp_date)
+    Path = Path+"/"+today_date+"/"+name+"/"+dT+"/"+exp_date+"/"+Name+".csv"
+    kBar = yf.download(tickers=Name, period="1d", interval=Interval)
+    savefile(kBar,Path,True)
+
+def DownLoad_Option(name,dT):
+        # Model Select
     calc = RiskBSM()
 
     ## Initialize Ticket Param
@@ -75,7 +111,7 @@ def DownLoad_Data(name,dT):
             bid = selected_call_option['bid'].iloc[0] if not np.isnan(selected_call_option['bid'].iloc[0]) else 0
             ask = selected_call_option['ask'].iloc[0] if not np.isnan(selected_call_option['ask'].iloc[0]) else 0
                 
-            Theo = round(calc.theo(S, K, V, T, dT,r), 4)
+            Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
             Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
             Theta  = round(calc.theta(S, K, V, T,r), 4)
             Vega   = round(calc.vega(S, K, V, T,r), 4)
@@ -100,10 +136,17 @@ def DownLoad_Data(name,dT):
             df = pd.DataFrame(data)
             allDF = pd.concat([allDF,df])
 
-
+            if volume != 0:
+                DownLoad_OptionBar(name,price,dT,exp_date) 
             print(f"==== Process {index+1}/{total} ====")
 
         print(allDF.to_string(index=False))
-        savefile(allDF,dT,name,exp_date)
+
+        today_date = datetime.today().strftime('%Y-%m-%d')
+        Path = "/media/ponder/ADATA HM900/OptionData/"
+        Type = "CALL" if dT == "C" else "PUT"
+        Path = Path+"/"+today_date+"/"+Type+"/"+name+"/"+exp_date+"/"+"OptionData.csv"
+        savefile(allDF,Path)
         print("")
+
         print("========================================")

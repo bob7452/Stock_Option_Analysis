@@ -1,8 +1,9 @@
 import sys
 import DownLoad 
 
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 4:
         print("Run Auto Mode")
 
         Stock = ["QQQ","SPY","DIA","IWM","AAPL","MSFT","GOOG","META","AMZN","TSLA","NVDA","TLT","^Vix","SOXX"]
@@ -10,10 +11,20 @@ if __name__ == "__main__":
         
         for Name in Stock:
             for dT in Type:
-                DownLoad.DownLoad_Data(Name,dT)
+                DownLoad.DownLoad_Data(Name,2,dT)
 
     else:
-        name = sys.argv[1]
-        dT   = sys.argv[2]
-        print(name +" / "+dT)
-        DownLoad.DownLoad_Data(name,dT)
+        name    = sys.argv[1]
+        DLType  = sys.argv[2]
+        dT      = sys.argv[3]
+        Iterval = sys.argv[4]
+
+        if DLType == 0:
+            sDLType = "Option " + dT
+        elif DLType == 1:
+            sDLType = "Stock"
+        else:
+            sDLType = "Stock + Option " +dT
+    
+        print(name + " " + sDLType + " " + Iterval)
+        DownLoad.DownLoad_Data(name,DLType,dT,Iterval)
