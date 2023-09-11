@@ -1,6 +1,7 @@
 import pandas as pd
 import os 
 from datetime import datetime
+from datetime import timedelta
 import yfinance as yf
 import yahooquery as yfq
 from bsm import RiskBSM
@@ -24,7 +25,8 @@ def ExDays(date):
             
     specified_date = datetime(year, mom, day)
     current_date = datetime.now()
-    time_interval = specified_date - current_date
+    newyork_date = current_date - timedelta(hours=12)
+    time_interval = specified_date - newyork_date
     years = time_interval.days / 365.0
 
     return years    
@@ -96,11 +98,19 @@ def DownLoad_Option(name,dT):
         allDF = pd.DataFrame()
 
         T = ExDays(exp_date) #Expiration date (days from now / 365)
+
+        if T < 0 :
+            continue
         
         print("========= "+ name +" - "+ exp_date +" =========")
         total = len(option_chain.calls['strike'])
 
-        for index, price in enumerate(option_chain.calls['strike']):
+        if(dT == "C"):
+            StrikeList = option_chain.calls['strike']
+        else:
+            StrikeList = option_chain.puts['strike']
+
+        for index, price in enumerate(StrikeList):
             if(dT == "C"):
                 selected_call_option = option_chain.calls[option_chain.calls['strike'] == price] 
             else:
