@@ -101,8 +101,10 @@ def DownLoad_Option(name,dT):
         total = len(option_chain.calls['strike'])
 
         for index, price in enumerate(option_chain.calls['strike']):
-
-            selected_call_option = option_chain.calls[option_chain.calls['strike'] == price] 
+            if(dT == "C"):
+                selected_call_option = option_chain.calls[option_chain.calls['strike'] == price] 
+            else:
+                selected_call_option = option_chain.puts[option_chain.puts['strike'] == price]
 
             K = selected_call_option['strike'].iloc[0]
             V = selected_call_option['impliedVolatility'].iloc[0] if not np.isnan(selected_call_option['impliedVolatility'].iloc[0]) else 0
@@ -146,7 +148,7 @@ def DownLoad_Option(name,dT):
         today_date = datetime.today().strftime('%Y-%m-%d')
         Path = "/media/ponder/ADATA HM900/OptionData/"
         Type = "CALL" if dT == "C" else "PUT"
-        Path = Path+"/"+today_date+"/"+Type+"/"+name+"/"+exp_date+"/"+"OptionData.csv"
+        Path = Path+"/"+today_date+"/"+name+"/"+exp_date+"/"+Type+"/"+"OptionData.csv"
         savefile(allDF,Path)
         print("")
 
