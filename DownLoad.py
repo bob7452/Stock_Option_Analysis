@@ -98,9 +98,6 @@ def DownLoad_Option(name,dT):
         allDF = pd.DataFrame()
 
         T = ExDays(exp_date) #Expiration date (days from now / 365)
-
-        if T < 0 :
-            continue
         
         print("========= "+ name +" - "+ exp_date +" =========")
         total = len(option_chain.calls['strike'])
@@ -112,23 +109,31 @@ def DownLoad_Option(name,dT):
 
         for index, price in enumerate(StrikeList):
             if(dT == "C"):
-                selected_call_option = option_chain.calls[option_chain.calls['strike'] == price] 
+                selected_option = option_chain.calls[option_chain.calls['strike'] == price] 
             else:
-                selected_call_option = option_chain.puts[option_chain.puts['strike'] == price]
+                selected_option = option_chain.puts[option_chain.puts['strike'] == price]
 
-            K = selected_call_option['strike'].iloc[0]
-            V = selected_call_option['impliedVolatility'].iloc[0] if not np.isnan(selected_call_option['impliedVolatility'].iloc[0]) else 0
-            oi = selected_call_option['openInterest'].iloc[0] if not np.isnan(selected_call_option['openInterest'].iloc[0]) else 0
-            volume = selected_call_option['volume'].iloc[0] if not np.isnan(selected_call_option['volume'].iloc[0]) else 0
-            lastPrice = selected_call_option['lastPrice'].iloc[0] if not np.isnan(selected_call_option['lastPrice'].iloc[0]) else 0
-            bid = selected_call_option['bid'].iloc[0] if not np.isnan(selected_call_option['bid'].iloc[0]) else 0
-            ask = selected_call_option['ask'].iloc[0] if not np.isnan(selected_call_option['ask'].iloc[0]) else 0
+            K = selected_option['strike'].iloc[0]
+            V = selected_option['impliedVolatility'].iloc[0] if not np.isnan(selected_option['impliedVolatility'].iloc[0]) else 0
+            oi = selected_option['openInterest'].iloc[0] if not np.isnan(selected_option['openInterest'].iloc[0]) else 0
+            volume = selected_option['volume'].iloc[0] if not np.isnan(selected_option['volume'].iloc[0]) else 0
+            lastPrice = selected_option['lastPrice'].iloc[0] if not np.isnan(selected_option['lastPrice'].iloc[0]) else 0
+            bid = selected_option['bid'].iloc[0] if not np.isnan(selected_option['bid'].iloc[0]) else 0
+            ask = selected_option['ask'].iloc[0] if not np.isnan(selected_option['ask'].iloc[0]) else 0
                 
-            Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
-            Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
-            Theta  = round(calc.theta(S, K, V, T,r), 4)
-            Vega   = round(calc.vega(S, K, V, T,r), 4)
-            Gamma  = round(calc.gamma(S, K, V, T,r), 4)
+            ## when contract close , calculate delta gamma theta is useless.    
+            if T > 0 :
+                Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
+                Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
+                Theta  = round(calc.theta(S, K, V, T,r), 4)
+                Vega   = round(calc.vega(S, K, V, T,r), 4)
+                Gamma  = round(calc.gamma(S, K, V, T,r), 4)
+            else:
+                Theo   = 0
+                Delta  = 0
+                Theta  = 0
+                Vega   = 0
+                Gamma  = 0
 
             data = { 'Date'  : [exp_date],
                     'CurrentPrice' : [S],
@@ -155,7 +160,9 @@ def DownLoad_Option(name,dT):
 
         print(allDF.to_string(index=False))
 
-        today_date = datetime.today().strftime('%Y-%m-%d')
+        current_date = datetime.now()
+        newyork_date = current_date - timedelta(hours=12)
+        today_date = newyork_date.strftime('%Y-%m-%d')
         Path = "/media/ponder/ADATA HM900/OptionData/"
         Type = "CALL" if dT == "C" else "PUT"
         Path = Path+"/"+today_date+"/"+name+"/"+exp_date+"/"+Type+"/"+"OptionData.csv"
