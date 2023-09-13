@@ -65,14 +65,18 @@ def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 
 def DownLoad_StockBar(name,Interval="1m"):
     Path = "/media/ponder/ADATA HM900/StockPriceData/"
-    today_date = datetime.today().strftime('%Y-%m-%d')
+    current_date = datetime.now()
+    newyork_date = current_date - timedelta(hours=12)
+    today_date = newyork_date.strftime('%Y-%m-%d')
     Path = Path+"/"+today_date+"/"+name+"/"+"Data.csv"
     kBar = yf.download(tickers = name, period="1d", interval=Interval)
     savefile(kBar,Path,True)
 
 def DownLoad_OptionBar(name,price,dT,exp_date,Interval="1m"):
     Path = "/media/ponder/ADATA HM900/StockPriceData/"
-    today_date = datetime.today().strftime('%Y-%m-%d')
+    current_date = datetime.now()
+    newyork_date = current_date - timedelta(hours=12)
+    today_date = newyork_date.strftime('%Y-%m-%d')
     Name = CombineOptionName(name,price,dT,exp_date)
     Path = Path+"/"+today_date+"/"+name+"/"+dT+"/"+exp_date+"/"+Name+".csv"
     kBar = yf.download(tickers=Name, period="3d", interval=Interval)
