@@ -61,9 +61,9 @@ def DownLoad_GreenIndex():
     current_date = datetime.now()
     today = current_date - timedelta(hours=12)
     today_date = today.strftime('%Y-%m-%d')
-    data = {"Date", [today_date],
-	    "Value",[result.value],
-            "Type", [result.description]}
+    data = {'Date' : [today_date],
+	    'Value':[result.value],
+            'Type' : [result.description]}
     df = pd.DataFrame(data)
 
     Path = "/media/ponder/ADATA HM900/StockPriceData/"
@@ -71,7 +71,7 @@ def DownLoad_GreenIndex():
     savefile(df,Path,True)
 
 def MarketBreath():
-    data = prasing.main()
+    data = parsing.main()
     return data
 
 def DownLoad_MarketBreath():
@@ -84,16 +84,16 @@ def DownLoad_MarketBreath():
     today_date = today.strftime('%Y-%m-%d')
 
     for index,Name in enumerate(mbtype):
-        data = { "Date" , [today_date],
-                 "Type" , [Name],
-                 "Value", result[index]
-               } 
-
-        allDF = pd.concat([allDF,df])
+        data = { 'Date' : [today_date],
+                 'Type' : [Name],
+                 'Value': result[index]
+               }  
+        df = pd.DataFrame(data)
+        alldf = pd.concat([alldf,df])
 
     Path = "/media/ponder/ADATA HM900/StockPriceData/"
     Path = Path+"/"+today_date+"/"+"Index"+"/"+"MarketBreath.csv"
-    savefile(allDF,Path,True)
+    savefile(alldf,Path,True)
 
 def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 

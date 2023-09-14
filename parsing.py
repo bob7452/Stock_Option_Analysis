@@ -39,12 +39,13 @@ def Parsing(soup,target,offset):
 def main(url="",find="",offset=0):
     if url == "" :
         print("Default Parsing Market Breath")
+        data = []
         for url  in urls:
             text = requestCMD(url) 
             target = 'Last Price'
             result = Parsing(text,target,6)
             print('ans : ',result)
-            data.extend(result)
+            data.append(result)
         return data
     else:
         test = requestCMD(url)
