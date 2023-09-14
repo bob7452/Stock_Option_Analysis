@@ -62,8 +62,8 @@ def DownLoad_GreenIndex():
     today = current_date - timedelta(hours=12)
     today_date = today.strftime('%Y-%m-%d')
     data = {"Date", [today_date],
-	    "Value",[data.value],
-            "Type", [data.description]}
+	    "Value",[result.value],
+            "Type", [result.description]}
     df = pd.DataFrame(data)
 
     Path = "/media/ponder/ADATA HM900/StockPriceData/"
