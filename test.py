@@ -3,17 +3,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 
-putpath = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/PUT/OptionData.csv'
-callpath = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/CALL/OptionData.csv'
-
-def dataFilting(df):
-    x = df['Strike'].values
-    y = df['TotalPain'].values
-    f = interp1d(x, y, kind='quadratic', fill_value='extrapolate')
-
-    df['TotalPain'] = df.apply(lambda row: f(row['Strike']) if np.isnan(row['TotalPain']) else row['TotalPain'], axis=1)
-
-    return df
+putpath = '/media/ponder/ADATA HM900/OptionData/2023-09-13/AAPL/2023-09-15/PUT/OptionData.csv'
+callpath = '/media/ponder/ADATA HM900/OptionData/2023-09-13/AAPL/2023-09-15/CALL/OptionData.csv'
 
 def replace_nan_with_zero(row):
     if np.isnan(row['TotalPain_x']) or np.isnan(row['TotalPain_y']):
@@ -68,7 +59,9 @@ else:
 # 使用 merge 方法将两个 DataFrame 合并，使用 'strike' 列作为连接键，并使用外连接方式（outer）确保保留所有 'strike' 值
 merged_df = pd.merge(callPain, putPain, on='Strike', how='outer')
 
-merged_df = merged_df.apply(replace_nan_with_zero, axis=1)
+#merged_df = merged_df.apply(replace_nan_with_zero, axis=1)
+merged_df=  merged_df.dropna()
+
 
 print(merged_df)
 
@@ -81,52 +74,16 @@ result_df = merged_df[['Strike', 'TotalPain']]
 # 打印合并后的结果
 print(result_df)
 
-result_df = dataFilting(result_df)
-
-print(result_df)
 
 result_df.to_csv('result.csv')
+callPain.to_csv('callpain.csv')
+putPain.to_csv('putpain.csv')
 
-#merged_df = mainList.merge(subList, on='Strike', how='outer').fillna(0)
-
-#merged_df['TotalPain'] = merged_df['TotalPain_x'] + merged_df['TotalPain_y']
-#
-#merged_df = merged_df.drop(['TotalPain_x', 'TotalPain_y'], axis=1)
-#
-
-
-#for strike,index in enumerate(mainList['Strike']):
-#    has_value = strike in subList['Strike'].values
-#    
-#    if has_value:
-#        subindex  = subList[subList['Strike']==strike].index.tolist()
-#        totalPain = mainList['TotalPain'].iloc[index]+subList['TotalPain'].iloc[subindex]
-#    else:
-#        totalPain = mainList['TotalPain'].iloc[index]
-#
-#    data = {'Strike' : [strike] , 'TotalPain' : [totalPain]}
-#    df = pd.DataFrame(data)
-#    resDF = pd.concat([resDF,df])
-#
-#
-#print(merged_df)
-
-# 找到 'value' 列的最小值的索引
-#min_index = merged_df['TotalPain'].idxmin()
+min_index = result_df['TotalPain'].idxmin()
 
 # 使用最小值的索引获取对应的 'name' 值
-#min_name = merged_df.loc[min_index, 'Strike']
+min_name = result_df.loc[min_index, 'Strike']
 
-#print("Max Pain Strike : ", min_name)
-#print("Total Loss : ",merged_df['TotalPain'].min())
-
-
-#callPain.to_csv("callpain.csv")
-#putPain.to_csv("putpain.csv")
-#merged_df.to_csv("output.csv")
-
-
-
-
-
-
+# 打印最小值和对应的 'name' 值
+print(" Min Loss : ", result_df['TotalPain'].min())
+print(" Max Pain : ", min_name)
