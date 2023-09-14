@@ -7,6 +7,8 @@ import yahooquery as yfq
 from bsm import RiskBSM
 from RIskRate import Rate
 import numpy as np
+import fear_and_greed
+import parsing
 
 def savefile(df,FilePath,findex = False):
 
@@ -49,6 +51,49 @@ def CombineOptionName(name,price,optionType,ExDate):
     contractName = name+formatted_date+optionType+fNumber
     print(f"contractName = {contractName}")
     return contractName
+
+def GreenIndex():
+    data = fear_and_greed.get()
+    return data
+
+def DownLoad_GreenIndex():
+    result = GreenIndex() 
+    current_date = datetime.now()
+    today = current_date - timedelta(hours=12)
+    today_date = today.strftime('%Y-%m-%d')
+    data = {"Date", [today_date],
+	    "Value",[data.value],
+            "Type", [data.description]}
+    df = pd.DataFrame(data)
+
+    Path = "/media/ponder/ADATA HM900/StockPriceData/"
+    Path = Path+"/"+today_date+"/"+"Index"+"/"+"CNNGreenIndex.csv"
+    savefile(df,Path,True)
+
+def MarketBreath():
+    data = prasing.main()
+    return data
+
+def DownLoad_MarketBreath():
+    mbtype = ['MMTW','MMFI','MMTH']
+    alldf = pd.DataFrame()
+    result = MarketBreath()
+           
+    current_date = datetime.now()
+    today = current_date - timedelta(hours=12)
+    today_date = today.strftime('%Y-%m-%d')
+
+    for index,Name in enumerate(mbtype):
+        data = { "Date" , [today_date],
+                 "Type" , [Name],
+                 "Value", result[index]
+               } 
+
+        allDF = pd.concat([allDF,df])
+
+    Path = "/media/ponder/ADATA HM900/StockPriceData/"
+    Path = Path+"/"+today_date+"/"+"Index"+"/"+"MarketBreath.csv"
+    savefile(allDF,Path,True)
 
 def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 

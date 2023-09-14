@@ -12,6 +12,9 @@ if __name__ == "__main__":
         for Name in Stock:
             for dT in Type:
                 DownLoad.DownLoad_Data(Name,2,dT)
+       
+        DownLoad.DownLoad_GreenIndex()
+        DownLoad.DownLoad_MarketBreath()
 
     else:
         name    = sys.argv[1]
