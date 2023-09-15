@@ -16,8 +16,10 @@ def replace_nan_with_zero(row):
 
 def bePositive(value,x,isCall):
     
-    scale = 1 if isCall else -1
-    result = (value - x) * scale
+    if isCall:
+        result = x-value
+    else:
+        result = value-x
     
     if result < 0:
         return 0
