@@ -1,3 +1,0 @@
-import parsing
-
-parsing.main()
