@@ -4,10 +4,12 @@ from datetime import timedelta
 Stock = ["QQQ","SPY","DIA","IWM",     \
          "AAPL","MSFT","GOOG","META", \
          "AMZN","TSLA","NVDA","TLT",  \
-         "^Vix","SMH","XLF","ARKK"]
+         "^Vix","SMH","XLF","ARKK",   \
+         "AMD","JPM", "U","XLB",      \
+         "BITO","XLE"]
 
 Type   = ["C","P"]
-OptionType = ["Call","Put"]
+OptionType = ["CALL","PUT"]
 
 disk_path = "/media/ponder/ADATA HM900/"
 
