@@ -1,14 +1,12 @@
 import sys
 import DownLoad 
+from Constant import Stock,Type
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print("Run Auto Mode")
 
-        Stock = ["QQQ","SPY","DIA","IWM","AAPL","MSFT","GOOG","META","AMZN","TSLA","NVDA","TLT","^Vix","SMH","XLF"]
-        Type   = ["C","P"]
-        
         for Name in Stock:
             for dT in Type:
                 DownLoad.DownLoad_Data(Name,2,dT)
