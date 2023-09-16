@@ -2,17 +2,28 @@ import pandas as pd
 import numpy as np
 from scipy.interpolate import interp1d
 
+KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
 
-putpath = '/media/ponder/ADATA HM900/OptionData/2023-09-13/AAPL/2023-09-15/PUT/OptionData.csv'
-callpath = '/media/ponder/ADATA HM900/OptionData/2023-09-13/AAPL/2023-09-15/CALL/OptionData.csv'
-debug = 1
+def sumPain(maindf,subdf,debug):
 
+    merged_df = pd.merge(maindf, subdf, on='Strike', how='outer') 
+    merged_df=  merged_df.dropna()
+    
+    merged_df['TotalPain'] = merged_df['TotalPain_x'] + merged_df['TotalPain_y']
+    result_df = merged_df[['Strike', 'TotalPain']]
 
-def replace_nan_with_zero(row):
-    if np.isnan(row['TotalPain_x']) or np.isnan(row['TotalPain_y']):
-        row['TotalPain_x'] = 0
-        row['TotalPain_y'] = 0
-    return row
+    min_index = result_df['TotalPain'].idxmin()
+    strike      = result_df.loc[min_index, 'Strike']
+    min_loss    = result_df['TotalPain'].min()
+
+    print(" Min Loss : ", result_df['TotalPain'].min())
+    print(" Max Pain : ", strike)
+
+    if debug :
+        result_df.to_csv('result.csv')
+        print(result_df)
+
+    return strike,min_loss 
 
 def bePositive(value,x,isCall):
     
@@ -26,7 +37,7 @@ def bePositive(value,x,isCall):
     else:
         return result
 
-def CalculateSum(strike,df,isCall):
+def calPainSum(strike,df,isCall):
     temp = pd.DataFrame()
     Product = df['Strike'].apply(bePositive,args=(strike,isCall,)) * df['OI']
     Sum = Product.sum()
@@ -42,63 +53,79 @@ def CalPain(mainList,subList,isMainCall):
 
     for strike in StrikeList:
         df = pd.DataFrame()
-        df = CalculateSum(strike,mainList,isMainCall)
+        df = calPainSum(strike,mainList,isMainCall)
         totalMainDF = pd.concat([totalMainDF,df])
 
-        df = CalculateSum(strike,subList,not isMainCall)
+        df = calPainSum(strike,subList,not isMainCall)
         totalSubDF  = pd.concat([totalSubDF,df])
-#        Product = mainList['Strike'].apply(bePositive,args=(strike,isCall,)) * DataList['OI']
-#        Sum = Product.sum()
-#        data = {'Strike' : [strike] ,'TotalPain' : [Sum] }
-#        df = pd.DataFrame(data)
-#        allDF = pd.concat([allDF,df])
     
     return totalMainDF,totalSubDF
 
+def CalGex(calldata,putdata):
+    callGEX = calldata['OI'] * calldata['Gamma']
+    putGEX  = putdata['OI']  * putdata['Gamma']
 
-putdata  = pd.read_csv(putpath)
-calldata = pd.read_csv(callpath)
+    totalGEX = callGEX.sum() - putGEX.sum()
+    return totalGEX
 
-callLen = len(calldata['Strike'])
-putLen  = len(putdata['Strike'])
+def sumKeyData(data,key=""):
+    if key != "":
+        return data[key].sum()
 
-if callLen > putLen:
-    mainList = putdata
-    subList  = calldata
-    isCall   = False
-else: 
-    mainList = calldata
-    subList  = putdata
-    isCall   = True
+    ans = []
+    for keys in KEYS:
+        ans.append(data[keys].sum())
+    return ans
 
-maindf , subdf = CalPain(mainList,subList,isCall)
+def main(callpath,putpath,debug=0):
+    putdata  = pd.read_csv(putpath)
+    calldata = pd.read_csv(callpath)
+    
+    callLen = len(calldata['Strike'])
+    putLen  = len(putdata['Strike'])
+    
+    if callLen > putLen:
+        mainList = putdata
+        subList  = calldata
+        isCall   = False
+    else: 
+        mainList = calldata
+        subList  = putdata
+        isCall   = True
+    
+    maindf , subdf = CalPain(mainList,subList,isCall)
+    strikePrice , min_loss  = sumPain(maindf,subdf,debug)
 
-if debug :
-    callPain = maindf if isCall else subdf
-    putPain  = subdf  if isCall else maindf
-    callPain.to_csv('callpain.csv')
-    putPain.to_csv('putpain.csv')
-    print(callPain)
-    print(putPain)
+    callKeySum = sumKeyData(calldata)
+    putKeySum  = sumKeyData(putdata)
+    Gex        = CalGex(calldata,putdata)
+    
+    #KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
+    data = { 'MaxPainStrike' : [strikePrice], 
+             'MinLoss'    : [min_loss],
+             'Gex'        : [Gex],
+             'CallDelta'  : [callKeySum[0]],
+             'CallGamma'  : [callKeySum[1]],
+             'CallTheta'  : [callKeySum[2]],
+             'CallVega'   : [callKeySum[3]],
+             'CallIV'     : [callKeySum[4]],
+             'CallOI'     : [callKeySum[5]],
+             'Callvolume' : [callKeySum[6]],
+             'putDelta'   : [putKeySum[0]],
+             'putGamma'   : [putKeySum[1]],
+             'putTheta'   : [putKeySum[2]],
+             'putVega'    : [putKeySum[3]],
+             'putIV'      : [putKeySum[4]],
+             'putOI'      : [putKeySum[5]],
+             'putvolume'  : [putKeySum[6]]
+            }
+    
+    df = pd.DataFrame(data)
+    return df    
 
-merged_df = pd.merge(maindf, subdf, on='Strike', how='outer')
+#if __name__ == "__main__":
+#    putpath  = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/PUT/OptionData.csv'
+#    callpath = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/CALL/OptionData.csv'
+#    data = main(callpath,putpath,1)   
+#    print(data)
 
-merged_df=  merged_df.dropna()
-
-merged_df['TotalPain'] = merged_df['TotalPain_x'] + merged_df['TotalPain_y']
-
-result_df = merged_df[['Strike', 'TotalPain']]
-
-print(result_df)
-
-
-result_df.to_csv('result.csv')
-
-min_index = result_df['TotalPain'].idxmin()
-
-# 使用最小值的索引获取对应的 'name' 值
-min_name = result_df.loc[min_index, 'Strike']
-
-# 打印最小值和对应的 'name' 值
-print(" Min Loss : ", result_df['TotalPain'].min())
-print(" Max Pain : ", min_name)

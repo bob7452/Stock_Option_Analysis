@@ -171,18 +171,11 @@ def DownLoad_Option(name,dT):
             ask = selected_option['ask'].iloc[0] if not np.isnan(selected_option['ask'].iloc[0]) else 0
                 
             ## when contract close , calculate delta gamma theta is useless.    
-            if T > 0 :
-                Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
-                Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
-                Theta  = round(calc.theta(S, K, V, T,r), 4)
-                Vega   = round(calc.vega(S, K, V, T,r), 4)
-                Gamma  = round(calc.gamma(S, K, V, T,r), 4)
-            else:
-                Theo   = 0
-                Delta  = 0
-                Theta  = 0
-                Vega   = 0
-                Gamma  = 0
+            Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
+            Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
+            Theta  = round(calc.theta(S, K, V, T,r), 4)
+            Vega   = round(calc.vega(S, K, V, T,r), 4)
+            Gamma  = round(calc.gamma(S, K, V, T,r), 4)
 
             data = { 'Date'  : [exp_date],
                     'CurrentPrice' : [S],
