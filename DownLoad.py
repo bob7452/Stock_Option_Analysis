@@ -62,7 +62,7 @@ def DownLoad_GreenIndex():
     today = current_date - timedelta(hours=12)
     today_date = today.strftime('%Y-%m-%d')
     data = {'Date' : [today_date],
-	    'Value':[result.value],
+       	    'Value':[result.value],
             'Type' : [result.description]}
     df = pd.DataFrame(data)
 
