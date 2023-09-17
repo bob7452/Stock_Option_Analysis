@@ -138,7 +138,7 @@ def DownLoad_Option(name,dT):
             total = len(option_chain.calls['strike'])
         else:
             StrikeList = option_chain.puts['strike']
-            total = len(option_chain.calls['strike'])
+            total = len(option_chain.puts['strike'])
         
         if(total == 0):
             print("StrikeList is empty , skip")
@@ -187,7 +187,7 @@ def DownLoad_Option(name,dT):
 
         print(allDF.to_string(index=False))
 
-        Type = "call.csv" if dT == "C" else "put.csv"
+        Type = "calldata.csv" if dT == "C" else "putdata.csv"
         today = myarg.getToday(12)
         today_date = today.strftime('%Y-%m-%d')
         Path = os.path.join(myarg.disk_path,myarg.op_path,name,exp_date,today_date,Type)
