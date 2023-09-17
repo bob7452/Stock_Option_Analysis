@@ -63,9 +63,7 @@ def DownLoad_GreenIndex():
             'Type' : [result.description]}
     df = pd.DataFrame(data)
 
-    #Path = "/media/ponder/ADATA HM900/StockPriceData/"
     Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"CNNGreenIndex.csv")
-    #Path = Path+"/"+today_date+"/"+"Index"+"/"+"CNNGreenIndex.csv"
     savefile(df,Path,True)
 
 def MarketBreath():
@@ -88,8 +86,6 @@ def DownLoad_MarketBreath():
         df = pd.DataFrame(data)
         alldf = pd.concat([alldf,df])
 
-    #Path = "/media/ponder/ADATA HM900/StockPriceData/"
-    #Path = Path+"/"+today_date+"/"+"Index"+"/"+"MarketBreath.csv"
     Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"MarketBreath.csv")
     savefile(alldf,Path,True)
 
@@ -107,11 +103,6 @@ def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
         DownLoad_StockBar(name,Iterval)
 
 def DownLoad_StockBar(name,Interval="1m"):
-#    Path = "/media/ponder/ADATA HM900/StockPriceData/"
-#    current_date = datetime.now()
-#    newyork_date = current_date - timedelta(hours=12)
-#    today_date = newyork_date.strftime('%Y-%m-%d')
-#    Path = Path+"/"+today_date+"/"+name+"/"+"Data.csv"
      
     today = myarg.getToday(12)
     today_date = today.strftime('%Y-%m-%d')   
@@ -200,11 +191,6 @@ def DownLoad_Option(name,dT):
         today = myarg.getToday(12)
         today_date = today.strftime('%Y-%m-%d')
         Path = os.path.join(myarg.disk_path,myarg.op_path,name,exp_date,today_date,Type)
-    #    current_date = datetime.now()
-    #    newyork_date = current_date - timedelta(hours=12)
-    #    today_date = newyork_date.strftime('%Y-%m-%d')
-    #    Path = "/media/ponder/ADATA HM900/OptionData/"
-    #    Path = Path+"/"+today_date+"/"+name+"/"+exp_date+"/"+Type+"/"+"OptionData.csv"
         savefile(allDF,Path)
         print("")
 
