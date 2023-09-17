@@ -47,6 +47,7 @@ def main():
             ## just process today auto mode
             recDay = myarg.getToday(12).strftime("%Y-%m-%d")
 
+            callpath = os.path.join(sourcepath,recDay,"calldata.csv")
             putpath = os.path.join(sourcepath,recDay,"putdata.csv")
             print("callpath",callpath)
             print("putpath",putpath)
