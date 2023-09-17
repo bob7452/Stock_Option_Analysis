@@ -149,18 +149,23 @@ def DownLoad_Option(name,dT):
         T = ExDays(exp_date) #Expiration date (days from now / 365)
         
         print("========= "+ name +" - "+ exp_date +" =========")
-        total = len(option_chain.calls['strike'])
 
         if(dT == "C"):
             StrikeList = option_chain.calls['strike']
+            total = len(option_chain.calls['strike'])
         else:
             StrikeList = option_chain.puts['strike']
+            total = len(option_chain.calls['strike'])
+        
+        if(total == 0):
+            print("StrikeList is empty , skip")
+            continue
 
         for index, price in enumerate(StrikeList):
             if(dT == "C"):
-                selected_option = option_chain.calls[option_chain.calls['strike'] == price] 
+                selected_option = option_chain.calls[StrikeList == price] 
             else:
-                selected_option = option_chain.puts[option_chain.puts['strike'] == price]
+                selected_option = option_chain.puts[StrikeList == price]
 
             K = selected_option['strike'].iloc[0]
             V = selected_option['impliedVolatility'].iloc[0] if not np.isnan(selected_option['impliedVolatility'].iloc[0]) else 0
@@ -170,7 +175,6 @@ def DownLoad_Option(name,dT):
             bid = selected_option['bid'].iloc[0] if not np.isnan(selected_option['bid'].iloc[0]) else 0
             ask = selected_option['ask'].iloc[0] if not np.isnan(selected_option['ask'].iloc[0]) else 0
                 
-            ## when contract close , calculate delta gamma theta is useless.    
             Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
             Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
             Theta  = round(calc.theta(S, K, V, T,r), 4)
@@ -196,8 +200,6 @@ def DownLoad_Option(name,dT):
             df = pd.DataFrame(data)
             allDF = pd.concat([allDF,df])
 
-            # if volume != 0:
-            #     DownLoad_OptionBar(name,price,dT,exp_date) 
             print(f"==== Process {index+1}/{total} ====")
 
         print(allDF.to_string(index=False))
