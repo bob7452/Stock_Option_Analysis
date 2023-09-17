@@ -53,7 +53,7 @@ def main():
             if not os.path.exists(callpath) or not os.path.exists(putpath):
                 continue
 
-            data = mp.main(callpath,putpath,1)
+            data = mp.main(callpath,putpath,0)
             new_row = pd.Series({'date': recDay})
             data = data.assign(**new_row)
             alldf = pd.concat([alldf,data])
