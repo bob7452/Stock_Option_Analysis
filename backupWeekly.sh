@@ -4,7 +4,7 @@ today=$(date +"%Y-%m-%d")
 op_dir="/media/ponder/ADATA HM900/OptionData"
 stock_dir="/media/ponder/ADATA HM900/StockPriceData"
 target_file="/media/ponder/ADATA HM900/BackUp/$today.tar.gz"
-google_dir="/home/ponder/migoogledrive/Stock"
+google_dir="/home/ponder/migoogledrive/Stock/Weekly"
 
 tar -czvf "$target_file" "$stock_dir" "$op_dir"
 
