@@ -21,6 +21,9 @@ stock_path = 'StockPriceData'
 
 db_path   = 'DailyReport'
 
+Debug     = True
+
+
 def getToday(offset = 0): 
     current = datetime.now()
     current = current - timedelta(hours=offset)

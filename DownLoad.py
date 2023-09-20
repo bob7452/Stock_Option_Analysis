@@ -26,10 +26,14 @@ def ExDays(date):
     year = int(year)
             
     specified_date = datetime(year, mom, day) + timedelta(hours = 16)
+  
+    if myarg.Debug:
+        print("ExDays",specified_date)
+
     time_interval = specified_date - myarg.getToday(12)
     years = time_interval.days / 365.0
 
-    return years    
+    return years if years > 0 else 0  
 
 def specialName(name):
     if name == "^Vix":
@@ -157,7 +161,16 @@ def DownLoad_Option(name,dT):
             lastPrice = selected_option['lastPrice'].iloc[0] if not np.isnan(selected_option['lastPrice'].iloc[0]) else 0
             bid = selected_option['bid'].iloc[0] if not np.isnan(selected_option['bid'].iloc[0]) else 0
             ask = selected_option['ask'].iloc[0] if not np.isnan(selected_option['ask'].iloc[0]) else 0
-                
+            
+            if myarg.Debug:
+                print("S",S)
+                print("K",K)
+                print("V",V)
+                print("T",T)
+                print("dT",dT)
+                print("r",r)
+    
+
             Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
             Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
             Theta  = round(calc.theta(S, K, V, T,r), 4)

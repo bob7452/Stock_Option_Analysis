@@ -36,7 +36,7 @@ def savefile(df,FilePath):
     else:
         temp = pd.read_csv(FilePath)
         temp = pd.concat([temp,df])
-        temp.to_csv(FilePath)
+        temp.to_csv(FilePath,index=False)
 
 def main():
 
