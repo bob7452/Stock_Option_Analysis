@@ -25,7 +25,7 @@ def ExDays(date):
     mom = int(mom)
     year = int(year)
             
-    specified_date = datetime(year, mom, day)
+    specified_date = datetime(year, mom, day) + timedelta(hours = 16)
     time_interval = specified_date - myarg.getToday(12)
     years = time_interval.days / 365.0
 
