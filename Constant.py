@@ -8,7 +8,7 @@ Stock = ["QQQ","SPY","DIA","IWM",     \
          "AMD","JPM", "U","XLB",      \
          "BITO","XLE","XHB","XLP",    \
          "XLV","XLU","XLI","XBI",     \
-         "XLK","UVXY","SOXL"]
+         "XLK","UVXY","SOXL","^SPX"]
 
 Type   = ["C","P"]
 OptionType = ["CALL","PUT"]
