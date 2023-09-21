@@ -7,3 +7,4 @@ Todo:
 3. DEX
 4. Visual Tools
 5. Alternative Source 
+6. Backup and AutoDelete
