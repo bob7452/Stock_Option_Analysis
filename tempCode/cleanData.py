@@ -18,14 +18,18 @@ for stockname in myarg.Stock:
     
         print(finalPath)
 
-        # 读取 CSV 文件
-        df = pd.read_csv(finalPath)
-        
-        # 删除所有包含 "Unnamed" 的列
-        df = df.loc[:, ~df.columns.str.contains('Unnamed')]
-        
-        # 保存 DataFrame 到新的 CSV 文件
-        df.to_csv(finalPath, index=False)
-        
+        try:
+            # 读取 CSV 文件
+            df = pd.read_csv(finalPath)
+
+            # 删除所有包含 "Unnamed" 的列
+            df = df.loc[:, ~df.columns.str.contains('Unnamed')]
+
+            # 保存 DataFrame 到新的 CSV 文件
+            df.to_csv(finalPath, index=False)
+            
+        except Exception as e:
+            print(f"读取或处理文件时发生错误：{e}")
+            continue
 
 
