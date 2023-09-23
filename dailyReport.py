@@ -12,7 +12,7 @@ def list_subdirectories(path):
 def report(wexcel,reportName):
 
     sourcepath = os.path.join(myarg.disk_path,myarg.op_path)
-    stocklist = myarg.Stock[:17]
+    stocklist = myarg.Stock
 
 #    today = myarg.getToday(12).strftime('%Y-%m-%d')
 #    reportName = 'Report_' + today + '.xlsx' 
