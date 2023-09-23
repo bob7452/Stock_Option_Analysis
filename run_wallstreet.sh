@@ -7,3 +7,7 @@ git clean -df
 pyscript="/home/ponder/Stock_Option_Analysis/optionCal.py"
 python3 $pyscript
 git clean -df
+
+pyscript="/home/ponder/Stock_Option_Analysis/dailyReport.py"
+python3 $pyscript
+git clena -df

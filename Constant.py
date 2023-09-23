@@ -4,11 +4,11 @@ from datetime import timedelta
 Stock = ["QQQ","SPY","DIA","IWM",     \
          "AAPL","MSFT","GOOG","META", \
          "AMZN","TSLA","NVDA","TLT",  \
-         "^Vix","SMH","XLF","ARKK",   \
+         "^Vix","SMH","^SPX","ARKK",  \
          "AMD","JPM", "U","XLB",      \
          "BITO","XLE","XHB","XLP",    \
          "XLV","XLU","XLI","XBI",     \
-         "XLK","UVXY","SOXL","^SPX"]
+         "XLK","UVXY","SOXL","XLF"]
 
 Type   = ["C","P"]
 OptionType = ["CALL","PUT"]
@@ -20,6 +20,8 @@ op_path   = 'OptionData'
 stock_path = 'StockPriceData'
 
 db_path   = 'DailyReport'
+
+DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
 Debug     = True
 
