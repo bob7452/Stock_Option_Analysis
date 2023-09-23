@@ -69,8 +69,6 @@ def main():
                 continue
 
             data = mp.main(callpath,putpath,0)
-            new_row = pd.Series({'date': recDay})
-            data = data.assign(**new_row)
             alldf = pd.concat([alldf,data])
 
             print(alldf) 

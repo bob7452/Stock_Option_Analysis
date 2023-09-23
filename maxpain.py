@@ -1,8 +1,17 @@
 import pandas as pd
 import numpy as np
 from scipy.interpolate import interp1d
+import re
 
-KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
+def recdays(path):
+    matchs = re.findall(r'\d{4}-\d{2}-\d{2}',path)
+
+    if matchs:
+        recday = matchs[-1]
+        print(recday)
+        return recday
+    else:
+        print("fail")
 
 def sumPain(maindf,subdf,debug):
 
@@ -61,16 +70,40 @@ def CalPain(mainList,subList,isMainCall):
     
     return totalMainDF,totalSubDF
 
-def CalGex(calldata,putdata):
+def calGex(calldata,putdata):
     callGEX = calldata['OI'] * calldata['Gamma']
     putGEX  = putdata['OI']  * putdata['Gamma']
 
     totalGEX = callGEX.sum() - putGEX.sum()
     return totalGEX
 
+def calDex(calldata,putdata):
+    callDEX = calldata['OI'] * calldata['Delta']
+    putDEX  = putdata['OI']  * putdata['Delta']
+
+    totalDEX = callDEX.sum() + putDEX.sum()
+    return totalDEX
+
+def sum_iv_filter(data,lens,mode):
+    temp = data['IV']
+    
+    if mode == 'Max-Min-Filter':
+        gain    = lens // 4 # keep middle
+        midlow  = gain
+        midhigh = lens // 2 + gain + 1
+ 
+        temp = temp.sort_values(ascending=True).values
+    
+        temp = np.array(temp) 
+        ans  = temp[midlow:midhigh].sum()
+
+    return ans
+
 def sumKeyData(data,key=""):
     if key != "":
         return data[key].sum()
+    
+    KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
 
     ans = []
     for keys in KEYS:
@@ -98,12 +131,18 @@ def main(callpath,putpath,debug=0):
 
     callKeySum = sumKeyData(calldata)
     putKeySum  = sumKeyData(putdata)
-    Gex        = CalGex(calldata,putdata)
-    
+    Gex        = calGex(calldata,putdata)
+    Dex        = calDex(calldata,putdata)
+    recday     = recdays(callpath)
+    c_mid_iv   = sum_iv_filter(calldata,callLen,"Max-Min-Filter")
+    p_mid_iv   = sum_iv_filter(putdata,putLen,"Max-Min-Filter")
+
     #KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
-    data = { 'MaxPainStrike' : [strikePrice], 
+    data = { 'Date'       : [recday],
+             'MaxPainStrike' : [strikePrice], 
              'MinLoss'    : [min_loss],
              'Gex'        : [Gex],
+             'Dex'        : [Dex],
              'CallDelta'  : [callKeySum[0]],
              'CallGamma'  : [callKeySum[1]],
              'CallTheta'  : [callKeySum[2]],
@@ -111,21 +150,23 @@ def main(callpath,putpath,debug=0):
              'CallIV'     : [callKeySum[4]],
              'CallOI'     : [callKeySum[5]],
              'Callvolume' : [callKeySum[6]],
+             'CallmidIV'  : [c_mid_iv],
              'putDelta'   : [putKeySum[0]],
              'putGamma'   : [putKeySum[1]],
              'putTheta'   : [putKeySum[2]],
              'putVega'    : [putKeySum[3]],
              'putIV'      : [putKeySum[4]],
              'putOI'      : [putKeySum[5]],
-             'putvolume'  : [putKeySum[6]]
+             'putvolume'  : [putKeySum[6]],
+             'putmidIV'   : [p_mid_iv],
             }
     
     df = pd.DataFrame(data)
     return df    
 
 #if __name__ == "__main__":
-#    putpath  = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/PUT/OptionData.csv'
-#    callpath = '/media/ponder/ADATA HM900/OptionData/2023-09-11/AAPL/2023-09-15/CALL/OptionData.csv'
+#    putpath  = '/media/ponder/ADATA HM900/OptionData/AAPL/2023-09-15/2023-09-13/putdata.csv'
+#    callpath  = '/media/ponder/ADATA HM900/OptionData/AAPL/2023-09-15/2023-09-13/calldata.csv'
 #    data = main(callpath,putpath,1)   
 #    print(data)
 

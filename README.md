@@ -4,8 +4,7 @@ Todo:
 
 1. MYSQL
 2. MarketBreath
-3. DEX
-4. Visual Tools
-5. Alternative Source 
-6. Backup and AutoDelete
-7. Data Filter
+3. Visual Tools
+4. Alternative Source 
+5. Backup and AutoDelete
+6. Data Filter
