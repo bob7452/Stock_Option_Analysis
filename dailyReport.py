@@ -24,7 +24,7 @@ def report(wexcel,reportName):
         alldf = pd.DataFrame()
 
         weekday = 4 if stockname != "^Vix" else 2
-        
+
         for exday in exdaysList:
             y,m,d = exday.split('-')
             y = int(y)
@@ -32,7 +32,6 @@ def report(wexcel,reportName):
             d = int(d)
     
             tdate = datetime.date(y,m,d)
-            print(tdate)
 
             if tdate < myarg.getToday(12).date():
                 continue    
@@ -40,12 +39,10 @@ def report(wexcel,reportName):
             if tdate.weekday() == weekday:
                 filename  = stockname + '_'+ exday + '.csv'
                 filepath = os.path.join(sourcepath,stockname,exday,filename)
-                print(filepath) 
                 try:
                     df = pd.read_csv(filepath)
                     last_row = df.iloc[-1]
                     last_row['Date'] = exday
-                    print(last_row)
                     alldf = alldf._append(last_row,ignore_index = True)
 
                 except Exception as e:
@@ -55,6 +52,9 @@ def report(wexcel,reportName):
                 continue
 
         try:
+            alldf['Date'] = pd.to_datetime(alldf['Date'])
+            alldf = alldf.sort_values(by='Date',ascending = True)
+            alldf['Date'] = alldf['Date'].dt.strftime('%Y-%m-%d')
             alldf.to_excel(wexcel,sheet_name=stockname,index=False)               
             alldf = pd.DataFrame()
         except Exception as e:
