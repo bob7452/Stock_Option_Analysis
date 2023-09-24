@@ -61,8 +61,6 @@ def report(wexcel,reportName):
             print(f'write file fail{e}')
             continue
 
-    return reportName
-
 def updateReport(source,target):
     shutil.copy(source,target)
 
@@ -73,11 +71,11 @@ if __name__ == "__main__":
     reportName = os.path.join(myarg.disk_path,myarg.db_path,reportName)
 
     wexcel = pd.ExcelWriter(reportName,engine = 'xlsxwriter')
-    source = report(wexcel,reportName)
+    report(wexcel,reportName)
     wexcel._save()
     
     target = myarg.DailyReprotPath 
-    updateReport(source,target)
+    updateReport(reportName,target)
 
 
 
