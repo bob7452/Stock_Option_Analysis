@@ -32,7 +32,7 @@ def savefile(df,FilePath):
         os.makedirs(directory)
 
     if not os.path.exists(FilePath):
-        df.to_csv(FilePath)
+        df.to_csv(FilePath,index=False)
     else:
         temp = pd.read_csv(FilePath)
         temp = pd.concat([temp,df])
