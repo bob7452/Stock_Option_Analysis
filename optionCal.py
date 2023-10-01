@@ -52,6 +52,7 @@ def main():
             exDay_obj = datetime.strptime(exDay,"%Y-%m-%d")
             if exDay_obj < myarg.getToday(12):
                 print("exDay < Today , Skip")
+                continue
 
             path2 = os.path.join(path1,exDay)  
             recDays = list_subdirectories(path2)
@@ -66,6 +67,7 @@ def main():
             print("callpath",callpath)
             print("putpath",putpath)
             if not os.path.exists(callpath) or not os.path.exists(putpath):
+                print("callpath / putpath is not exist")
                 continue
 
             data = mp.main(callpath,putpath,0)
