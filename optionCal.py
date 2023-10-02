@@ -34,13 +34,17 @@ def savefile(df,FilePath):
     if not os.path.exists(FilePath):
         df.to_csv(FilePath,index=False)
     else:
-        temp = pd.read_csv(FilePath)
-        temp = pd.concat([temp,df])
-        temp.to_csv(FilePath,index=False)
+        try:
+            temp = pd.read_csv(FilePath)
+            temp = pd.concat([temp,df])
+            temp.to_csv(FilePath,index=False)
+        except pd.errors.EmptyDataError:
+            df.to_csv(FilePath,index = False)
 
 def main():
 
     watchlist  = myarg.Stock
+    print(watchlist)
     optype     = myarg.OptionType 
     alldf      = pd.DataFrame()
     for name in watchlist:
