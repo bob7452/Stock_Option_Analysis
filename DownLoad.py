@@ -68,7 +68,7 @@ def DownLoad_GreenIndex():
     df = pd.DataFrame(data)
 
     Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"CNNGreenIndex.csv")
-    savefile(df,Path,True)
+    savefile(df,Path)
 
 def MarketBreath():
     data = parsing.main()
@@ -91,7 +91,7 @@ def DownLoad_MarketBreath():
         alldf = pd.concat([alldf,df])
 
     Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"MarketBreath.csv")
-    savefile(alldf,Path,True)
+    savefile(alldf,Path)
 
 def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 
@@ -112,7 +112,7 @@ def DownLoad_StockBar(name,Interval="1m"):
     today_date = today.strftime('%Y-%m-%d')   
     Path = os.path.join(myarg.disk_path,myarg.stock_path,name,today_date,"Data.csv")
     kBar = yf.download(tickers = name, period="1d", interval=Interval)
-    savefile(kBar,Path,True)
+    savefile(kBar,Path)
 
 def DownLoad_Option(name,dT):
     # Model Select
