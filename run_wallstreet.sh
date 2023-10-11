@@ -17,9 +17,9 @@ python3 $python_script > "$DL_Log" 2>&1
 git clean -df
 
 pyscript="/home/ponder/Stock_Option_Analysis/optionCal.py"
-python3 $pyscript 2> "$op_Log" 2>&1
+python3 $pyscript > "$op_Log" 2>&1
 git clean -df
 
 pyscript="/home/ponder/Stock_Option_Analysis/dailyReport.py"
-python3 $pyscript 2> "$daily_Log" 2>&1
+python3 $pyscript > "$daily_Log" 2>&1
 git clean -df
