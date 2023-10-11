@@ -2,7 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 import sys
 sys.path.append("/media/ponder/ADATA HM900")
-import Key
+import key
 
 
 Stock = ["QQQ","SPY","DIA","IWM",     \
