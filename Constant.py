@@ -26,6 +26,8 @@ stock_path = 'StockPriceData'
 
 db_path   = 'DailyReport'
 
+backup_path = 'BackUp'
+
 DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
 Debug     = True

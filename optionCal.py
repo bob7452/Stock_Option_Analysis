@@ -12,10 +12,10 @@ def backup():
     opsourcefolder = os.path.join(myarg.disk_path,myarg.op_path)
     stocksourcefolder = os.path.join(myarg.disk_path,myarg.stock_path)
 
-    targetfolder = os.path.join(myarg.disk_path,"BackUp",today,myarg.op_path)
+    targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,myarg.op_path)
     print(f"Back File {opsourcefolder} to {targetfolder}")
     shutil.copytree(opsourcefolder,targetfolder)
-    targetfolder = os.path.join(myarg.disk_path,"BackUp",today,myarg.stock_path)
+    targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,myarg.stock_path)
     print(f"Back File {stocksourcefolder} to {targetfolder}")
     shutil.copytree(stocksourcefolder,targetfolder)
     
