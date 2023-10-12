@@ -66,7 +66,7 @@ def updateReport(source,target):
 
 if __name__ == "__main__":
 
-    today = myarg.getToday(12).strftime('%Y-%m-%d')
+    today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
     reportName = 'Report_' + today + '.xlsx' 
     reportName = os.path.join(myarg.disk_path,myarg.db_path,reportName)
 

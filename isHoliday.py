@@ -2,7 +2,7 @@ import sys
 from pandas_market_calendars import get_calendar
 import Constant as myarg
 
-today = myarg.getToday(12)
+today = myarg.getToday(myarg.offset_time)
 today = today.strftime('%Y-%m-%d')
 nyse = get_calendar('NYSE')
 

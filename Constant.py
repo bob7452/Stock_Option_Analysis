@@ -32,6 +32,8 @@ DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
 Debug     = True
 
+offset_time = 26
+
 ApiKey = key.api_key
 
 def getToday(offset = 0): 

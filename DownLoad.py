@@ -30,7 +30,7 @@ def ExDays(date):
     if myarg.Debug:
         print("ExDays",specified_date)
 
-    time_interval = specified_date - myarg.getToday(12)
+    time_interval = specified_date - myarg.getToday(myarg.offset_time)
     years = time_interval.days / 365.0
 
     return years if years > 0 else 0  
@@ -60,7 +60,7 @@ def GreenIndex():
 
 def DownLoad_GreenIndex():
     result = GreenIndex() 
-    today = myarg.getToday(12)
+    today = myarg.getToday(myarg.offset_time)
     today_date = today.strftime('%Y-%m-%d')
     data = {'Date' : [today_date],
        	    'Value':[result.value],
@@ -79,7 +79,7 @@ def DownLoad_MarketBreath():
     alldf = pd.DataFrame()
     result = MarketBreath()
            
-    today = myarg.getToday(12)
+    today = myarg.getToday(myarg.offset_time)
     today_date = today.strftime('%Y-%m-%d')
 
     for index,Name in enumerate(mbtype):
@@ -108,7 +108,7 @@ def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 
 def DownLoad_StockBar(name,Interval="1m"):
      
-    today = myarg.getToday(12)
+    today = myarg.getToday(myarg.offset_time)
     today_date = today.strftime('%Y-%m-%d')   
     Path = os.path.join(myarg.disk_path,myarg.stock_path,name,today_date,"Data.csv")
     kBar = yf.download(tickers = name, period="1d", interval=Interval)
@@ -201,7 +201,7 @@ def DownLoad_Option(name,dT):
         print(allDF.to_string(index=False))
 
         Type = "calldata.csv" if dT == "C" else "putdata.csv"
-        today = myarg.getToday(12)
+        today = myarg.getToday(myarg.offset_time)
         today_date = today.strftime('%Y-%m-%d')
         Path = os.path.join(myarg.disk_path,myarg.op_path,name,exp_date,today_date,Type)
         savefile(allDF,Path)

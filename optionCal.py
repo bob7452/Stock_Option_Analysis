@@ -8,7 +8,7 @@ import shutil
 
 def backup():
 
-    today = myarg.getToday(12).strftime("%Y-%m-%d")
+    today = myarg.getToday(myarg.offset_time).strftime("%Y-%m-%d")
     opsourcefolder = os.path.join(myarg.disk_path,myarg.op_path)
     stocksourcefolder = os.path.join(myarg.disk_path,myarg.stock_path)
 
@@ -54,7 +54,7 @@ def main():
         for exDay in exDays: 
             ## if exDay < Today , continue
             exDay_obj = datetime.strptime(exDay,"%Y-%m-%d")
-            if exDay_obj < myarg.getToday(12):
+            if exDay_obj < myarg.getToday(myarg.offset_time):
                 print("exDay < Today , Skip")
                 continue
 
@@ -64,7 +64,7 @@ def main():
             
             #for recDay in recDays:
             ## just process today auto mode
-            recDay = myarg.getToday(12).strftime("%Y-%m-%d")
+            recDay = myarg.getToday(myarg.offset_time).strftime("%Y-%m-%d")
 
             callpath = os.path.join(sourcepath,recDay,"calldata.csv")
             putpath = os.path.join(sourcepath,recDay,"putdata.csv")
