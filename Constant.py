@@ -1,8 +1,5 @@
 from datetime import datetime
 from datetime import timedelta
-import sys
-sys.path.append("/media/ponder/ADATA HM900")
-import key
 
 
 Stock = ["QQQ","SPY","DIA","IWM",     \
@@ -32,9 +29,7 @@ DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
 Debug     = True
 
-offset_time = 12
-
-ApiKey = key.api_key
+offset_time = 27
 
 def getToday(offset = 0): 
     current = datetime.now()

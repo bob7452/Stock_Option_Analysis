@@ -33,7 +33,7 @@ def report(wexcel,reportName):
     
             tdate = datetime.date(y,m,d)
 
-            if tdate < myarg.getToday(12).date():
+            if tdate < myarg.getToday(myarg.offset_time).date():
                 continue    
 
             if tdate.weekday() == weekday:
