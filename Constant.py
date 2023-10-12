@@ -32,7 +32,7 @@ DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
 Debug     = True
 
-offset_time = 26
+offset_time = 12
 
 ApiKey = key.api_key
 
