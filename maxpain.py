@@ -85,9 +85,9 @@ def calDex(calldata,putdata):
     return totalDEX
 
 def sum_iv_filter(data,lens,mode):
-    temp = data['IV']
     
     if mode == 'Max-Min-Filter':
+        temp = data['IV']
         gain    = lens // 4 # keep middle
         midlow  = gain
         midhigh = lens // 2 + gain + 1
@@ -97,6 +97,13 @@ def sum_iv_filter(data,lens,mode):
         temp = np.array(temp) 
         ans  = temp[midlow:midhigh].sum()
 
+    if mode == 'Middle-Filter':
+        temp = data['Strike']
+        price = data['CurrentPrice'][0]
+        nearest_value, index = min((abs(x - price), i) for i, x in enumerate(temp))
+        temp = data['IV']
+        ans = temp[index-3 : index+4].sum()
+        
     return ans
 
 def sumKeyData(data,key=""):
@@ -134,13 +141,12 @@ def main(callpath,putpath,debug=0):
     Gex        = calGex(calldata,putdata)
     Dex        = calDex(calldata,putdata)
     recday     = recdays(callpath)
-    c_mid_iv   = sum_iv_filter(calldata,callLen,"Max-Min-Filter")
-    p_mid_iv   = sum_iv_filter(putdata,putLen,"Max-Min-Filter")
+    c_mid_iv   = sum_iv_filter(calldata,callLen,"Middle-Filter")
+    p_mid_iv   = sum_iv_filter(putdata,putLen,"Middle-Filter")
 
     #KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
     data = { 'Date'       : [recday],
              'MaxPainStrike' : [strikePrice], 
-             'MinLoss'    : [min_loss],
              'Gex'        : [Gex],
              'Dex'        : [Dex],
              'CallDelta'  : [callKeySum[0]],
