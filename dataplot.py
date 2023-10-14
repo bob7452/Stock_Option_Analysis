@@ -8,6 +8,8 @@ class DATAPLOT:
             'DEX',
             'GEX',
             'P-C IV',
+            'C OI Chg',
+            'P OI Chg',
             'C/P Ratio'
     ]
     __Color = [
@@ -68,16 +70,22 @@ class DATAPLOT:
         plt.savefig(str(self.__path)+'.png',dpi = 300)
         plt.show()
 
+def calculate_difference(data, key):
+    return [0] + [data[key][i] - data[key][i - 1] for i in range(1, len(data[key]))]
+
 def test():
 
-    path = '/media/ponder/ADATA HM900/OptionData/SPY/2023-10-20/SPY_2023-10-20.csv'
+    path = '/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/QQQ_2023-10-20.csv'
     data = pd.read_csv(path)
-    path = '/media/ponder/ADATA HM900/OptionData/SPY/2023-10-20/SPY_2023-10-20'
+    path = '/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/QQQ_2023-10-20'
+
+    coi  = calculate_difference(data,'CallOI')
+    poi  = calculate_difference(data,'putOI')
     
-    ydata = [data['Dex'],data['Gex'],data['putIV']-data['CallIV'],data['CallOI']/data['putOI']]
+    ydata = [data['Dex'],data['Gex'],data['puttotalIV']-data['CalltotalIV'],coi,poi,data['CallOI']/data['putOI']]
     date  = data['Date']
-    title ='SPY_2023-10-20'
-    plot = DATAPLOT(4,ydata,date,title,path)
+    title ='QQQ_2023-10-20'
+    plot = DATAPLOT(6,ydata,date,title,path)
 
     plot._Plot()
     

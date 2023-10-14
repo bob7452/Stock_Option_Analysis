@@ -103,7 +103,7 @@ def sum_iv_filter(data,lens,mode):
         nearest_value, index = min((abs(x - price), i) for i, x in enumerate(temp))
         temp = data['IV']
         ans = temp[index-3 : index+4].sum()
-        
+
     return ans
 
 def sumKeyData(data,key=""):
@@ -141,8 +141,8 @@ def main(callpath,putpath,debug=0):
     Gex        = calGex(calldata,putdata)
     Dex        = calDex(calldata,putdata)
     recday     = recdays(callpath)
-    c_mid_iv   = sum_iv_filter(calldata,callLen,"Middle-Filter")
-    p_mid_iv   = sum_iv_filter(putdata,putLen,"Middle-Filter")
+    c_total_iv = sumKeyData(calldata,"IV") #sum_iv_filter(calldata,callLen,"Middle-Filter")
+    p_total_iv = sumKeyData(putdata,"IV") #sum_iv_filter(putdata,putLen,"Middle-Filter")
 
     #KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
     data = { 'Date'       : [recday],
@@ -156,7 +156,7 @@ def main(callpath,putpath,debug=0):
              'CallIV'     : [callKeySum[4]],
              'CallOI'     : [callKeySum[5]],
              'Callvolume' : [callKeySum[6]],
-             'CallmidIV'  : [c_mid_iv],
+             'CalltotalIV': [c_total_iv],
              'putDelta'   : [putKeySum[0]],
              'putGamma'   : [putKeySum[1]],
              'putTheta'   : [putKeySum[2]],
@@ -164,7 +164,7 @@ def main(callpath,putpath,debug=0):
              'putIV'      : [putKeySum[4]],
              'putOI'      : [putKeySum[5]],
              'putvolume'  : [putKeySum[6]],
-             'putmidIV'   : [p_mid_iv],
+             'puttotalIV' : [p_total_iv],
             }
     
     df = pd.DataFrame(data)
