@@ -15,12 +15,13 @@ class DATAPLOT:
         '#FFB6C1', #lightblue
     ]
 
-    def __init__(self,subSize,data_y_list,date,title):
+    def __init__(self,subSize,data_y_list,date,title,path):
         self.__subSize = subSize
         self.__data_y_list = data_y_list
         self.__date = date
         self.__gs = 0
         self.__title = title
+        self.__path = path
     
     def __createPlot(self):
         fig = plt.figure(figsize=(12,8))
@@ -49,7 +50,7 @@ class DATAPLOT:
             ax.axhline(y=maxBoundary, color='#ff0000', linestyle='--', label=f'{name} Upper Bound {round(maxBoundary,2)}')
             ax.axhline(y=minBoundary, color='g', linestyle='--', label=f'{name} Lower Bound {round(minBoundary,2)}') 
             ax.set_ylabel(f'Value ({name})')
-            ax.legend()
+            ax.legend(loc='upper left')
             ax.grid(True)
 
             if index != self.__subSize - 1:  # Hide x-axis labels for all subplots except the last one
@@ -64,20 +65,22 @@ class DATAPLOT:
 
         # 顯示圖表
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.savefig(str(self.__path)+'.png',dpi = 300)
         plt.show()
 
 def test():
 
-    path = '/media/ponder/ADATA HM900/OptionData/GOOG/2023-10-20/GOOG_2023-10-20.csv'
+    path = '/media/ponder/ADATA HM900/OptionData/SPY/2023-10-20/SPY_2023-10-20.csv'
     data = pd.read_csv(path)
+    path = '/media/ponder/ADATA HM900/OptionData/SPY/2023-10-20/SPY_2023-10-20'
     
     ydata = [data['Dex'],data['Gex'],data['putIV']-data['CallIV'],data['CallOI']/data['putOI']]
     date  = data['Date']
-    title ='GOOG_2023-10-20'
-    plot = DATAPLOT(4,ydata,date,title)
+    title ='SPY_2023-10-20'
+    plot = DATAPLOT(4,ydata,date,title,path)
 
     plot._Plot()
-
+    
 
 
 

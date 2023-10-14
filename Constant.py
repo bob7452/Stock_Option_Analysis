@@ -28,6 +28,8 @@ backup_path = 'BackUp'
 
 DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
+daliy_picture   = "DailyReprot/picture"
+
 Debug     = True
 
 offset_time = 27
