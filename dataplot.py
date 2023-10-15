@@ -2,15 +2,13 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
 from Constant import *
+import yfinance as yf
 
 class DATAPLOT:
     __Key = [
             'DEX',
             'GEX',
-            'P-C IV',
-            'C OI Chg',
-            'P OI Chg',
-            'C/P Ratio'
+            'P-C IV'
     ]
     __Color = [
         '#ADD8E6' , #lightpurple
@@ -24,7 +22,7 @@ class DATAPLOT:
         self.__gs = 0
         self.__title = title
         self.__path = path
-    
+
     def __createPlot(self):
         fig = plt.figure(figsize=(12,8))
         height_ratios = [1] * self.__subSize  # Equal height for each subplot
@@ -70,22 +68,31 @@ class DATAPLOT:
         plt.savefig(str(self.__path)+'.png',dpi = 300)
         plt.show()
 
-def calculate_difference(data, key):
-    return [0] + [data[key][i] - data[key][i - 1] for i in range(1, len(data[key]))]
+def historical_volatility(stock_name, window_size=30):
+    tickets = yf.download(stock_name, period='3y')
+    price = tickets['Adj Close'].pct_change()
+    price = price.dropna()
+    
+    historical_volatilities = []
+    for i in range(len(price) - window_size + 1):
+        price_window = price[i:i + window_size]
+        price_changes = price_window.diff().dropna()
+        historical_volatility = price_changes.std()*np.sqrt(252)
+        historical_volatilities.append(historical_volatility)
+    
+    return historical_volatilities
 
 def test():
+    stock_name = "TSLA"
 
-    path = '/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/QQQ_2023-10-20.csv'
+    path = f'/media/ponder/ADATA HM900/OptionData/{stock_name}/2023-10-20/{stock_name}_2023-10-20.csv'
     data = pd.read_csv(path)
-    path = '/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/QQQ_2023-10-20'
+    path = f'/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/{stock_name}_2023-10-20'
 
-    coi  = calculate_difference(data,'CallOI')
-    poi  = calculate_difference(data,'putOI')
-    
-    ydata = [data['Dex'],data['Gex'],data['puttotalIV']-data['CalltotalIV'],coi,poi,data['CallOI']/data['putOI']]
+    ydata = [data['Dex'],data['Gex'],data['putIV']-data['CallIV']]
     date  = data['Date']
-    title ='QQQ_2023-10-20'
-    plot = DATAPLOT(6,ydata,date,title,path)
+    title =f'{stock_name}_2023-10-20'
+    plot = DATAPLOT(3,ydata,date,title,path)
 
     plot._Plot()
     
@@ -94,3 +101,4 @@ def test():
 
 if __name__ == "__main__":
     test()
+

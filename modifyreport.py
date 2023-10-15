@@ -143,5 +143,5 @@ def _modifystock():
 
 if __name__ == "__main__":
     backup()
-    _modifystock()
-#    main()
+#    _modifystock()
+    main()
