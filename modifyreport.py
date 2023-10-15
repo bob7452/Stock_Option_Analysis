@@ -89,6 +89,59 @@ def main():
             savefile(alldf,filepath)
             alldf  = pd.DataFrame()
 
+def _modifystock():
+
+    watchlist  = myarg.Stock
+    watchlist.append("Index")
+    print(watchlist)
+
+    alldf      = pd.DataFrame()
+    for name in watchlist:
+        sourcepath  = os.path.join(myarg.disk_path,myarg.stock_path,name)
+        recDays = list_subdirectories(sourcepath)
+
+        for recDay in recDays:
+            if name == "Index":
+                GreenPath = os.path.join(sourcepath,recDay,"CNNGreenIndex.csv")
+                MarketPath = os.path.join(sourcepath,recDay,"MarketBreath.csv")
+                greendata = pd.read_csv(GreenPath)
+                marketdata = pd.read_csv(MarketPath)
+                
+                print(f'market path : {MarketPath}\n')
+                print(f'Green Path : {GreenPath}\n')
+
+                newdata = pd.DataFrame({
+                    'Date': [greendata['Date'].iloc[0]],
+                    'Fear Green Value': [greendata['Value'].iloc[0]],
+                    'MMTW': [marketdata['Value'].iloc[0]],
+                    'MMFI': [marketdata['Value'].iloc[1]],
+                    'MMTH': [marketdata['Value'].iloc[2]]
+                })
+                
+                alldf = pd.concat([alldf,newdata])
+
+            else:
+                stockpath = os.path.join(sourcepath,recDay,"Data.csv")
+                print("stockpath",stockpath)
+                stockprice = pd.read_csv(stockpath)
+                newdata = pd.DataFrame({
+                    'Date': [recDay],
+                    'Open': [stockprice['Open'].iloc[0]],
+                    'Close':[stockprice['Close'].iloc[-1]],
+                    'High': [stockprice['High'].max()],
+                    'Low': [stockprice['Low'].min()]
+                }) 
+                alldf = pd.concat([alldf,newdata])
+
+        print(alldf) 
+        filename = name + '.csv'
+        filepath = os.path.join(sourcepath,filename)
+        
+        savefile(alldf,filepath)
+        alldf  = pd.DataFrame()
+
+
 if __name__ == "__main__":
     backup()
-    main()
+    _modifystock()
+#    main()

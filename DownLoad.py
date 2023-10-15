@@ -58,40 +58,63 @@ def GreenIndex():
     data = fear_and_greed.get()
     return data
 
-def DownLoad_GreenIndex():
-    result = GreenIndex() 
-    today = myarg.getToday(myarg.offset_time)
-    today_date = today.strftime('%Y-%m-%d')
-    data = {'Date' : [today_date],
-       	    'Value':[result.value],
-            'Type' : [result.description]}
-    df = pd.DataFrame(data)
-
-    Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"CNNGreenIndex.csv")
-    savefile(df,Path)
-
 def MarketBreath():
     data = parsing.main()
     return data
 
-def DownLoad_MarketBreath():
-    mbtype = ['MMTW','MMFI','MMTH']
-    alldf = pd.DataFrame()
-    result = MarketBreath()
-           
+def DownLoad_Index():
+    greendata = GreenIndex()
+    marketdata = MarketBreath()
+    
     today = myarg.getToday(myarg.offset_time)
     today_date = today.strftime('%Y-%m-%d')
 
-    for index,Name in enumerate(mbtype):
-        data = { 'Date' : [today_date],
-                 'Type' : [Name],
-                 'Value': result[index]
-               }  
-        df = pd.DataFrame(data)
-        alldf = pd.concat([alldf,df])
+    data = pd.DataFrame({'Date' : [today_date],
+            'Fear Green Value': [greendata.value],
+            'MMTW' : [marketdata[0]],
+            'MMFI' : [marketdata[1]],
+            'MMTH' : [marketdata[2]]
+    })
 
-    Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"MarketBreath.csv")
-    savefile(alldf,Path)
+    filepath = os.path.join(myarg.disk_path,stock_path,"Index","Index.csv")
+   
+    if os.path.exists(filepath):
+        alldf = pd.read_csv(filepath)
+        alldf = pd.concat([alldf,data])
+    else:
+        data.to_csv(filepath,index=False)
+
+#def DownLoad_GreenIndex():
+#    result = GreenIndex() 
+#    today = myarg.getToday(myarg.offset_time)
+#    today_date = today.strftime('%Y-%m-%d')
+#    data = {'Date' : [today_date],
+#       	    'Value':[result.value],
+#            'Type' : [result.description]}
+#    df = pd.DataFrame(data)
+#
+#    #Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"CNNGreenIndex.csv")
+#    #savefile(df,Path)
+
+
+#def DownLoad_MarketBreath():
+#    mbtype = ['MMTW','MMFI','MMTH']
+#    alldf = pd.DataFrame()
+#    result = MarketBreath()
+#           
+#    today = myarg.getToday(myarg.offset_time)
+#    today_date = today.strftime('%Y-%m-%d')
+#
+#    for index,Name in enumerate(mbtype):
+#        data = { 'Date' : [today_date],
+#                 'Type' : [Name],
+#                 'Value': result[index]
+#               }  
+#        df = pd.DataFrame(data)
+#        alldf = pd.concat([alldf,df])
+#
+#    #Path = os.path.join(myarg.disk_path,myarg.stock_path,"Index",today_date,"MarketBreath.csv")
+#    #savefile(alldf,Path)
 
 def DownLoad_Data(name,DLType,OptionType,Iterval="1m"):
 
