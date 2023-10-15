@@ -3,6 +3,7 @@ import pandas as pd
 import Constant as myarg
 import datetime 
 import shutil
+import dataplot
 
 
 def list_subdirectories(path):
@@ -48,6 +49,9 @@ def report(wexcel,reportName):
                 except Exception as e:
                     print(f"open file fail {e}")
                     continue
+                
+                dataplot.genpicture(stockname,exday,filepath)
+                
             else:
                 continue
 

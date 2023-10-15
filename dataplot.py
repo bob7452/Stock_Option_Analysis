@@ -66,7 +66,7 @@ class DATAPLOT:
         # 顯示圖表
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         plt.savefig(str(self.__path)+'.png',dpi = 300)
-        plt.show()
+        #plt.show()
 
 def historical_volatility(stock_name, window_size=30):
     tickets = yf.download(stock_name, period='3y')
@@ -82,16 +82,16 @@ def historical_volatility(stock_name, window_size=30):
     
     return historical_volatilities
 
-def test():
-    stock_name = "TSLA"
+def genpicture(name,exday,path):
 
-    path = f'/media/ponder/ADATA HM900/OptionData/{stock_name}/2023-10-20/{stock_name}_2023-10-20.csv'
-    data = pd.read_csv(path)
-    path = f'/media/ponder/ADATA HM900/OptionData/QQQ/2023-10-20/{stock_name}_2023-10-20'
+    try:
+        data = pd.read_csv(path)
+    except:
+        print(f'{path} plot figure fail\n')
 
     ydata = [data['Dex'],data['Gex'],data['putIV']-data['CallIV']]
     date  = data['Date']
-    title =f'{stock_name}_2023-10-20'
+    title = name + ' ' + exday
     plot = DATAPLOT(3,ydata,date,title,path)
 
     plot._Plot()
@@ -99,6 +99,6 @@ def test():
 
 
 
-if __name__ == "__main__":
-    test()
+# if __name__ == "__main__":
+#     genpicture(name,exday,path)
 
