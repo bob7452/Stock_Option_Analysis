@@ -5,7 +5,6 @@ import datetime
 import shutil
 import dataplot
 
-
 def list_subdirectories(path):
     subdirectories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path,d))]
     return subdirectories
@@ -51,7 +50,6 @@ def report(wexcel,reportName):
                     continue
                 
                 dataplot.genpicture(stockname,exday,filepath)
-                
             else:
                 continue
 
@@ -68,6 +66,21 @@ def report(wexcel,reportName):
 def updateReport(source,target):
     shutil.copy(source,target)
 
+def updatepic():
+    today = myarg.getToday().strftime('%Y-%m-%d')
+    stocklist = myarg.Stock
+    
+    for name in stocklist:
+        exday = myarg.find_third_friday(today,name)
+        targetpath = os.path.join(myarg.daliy_picture,exday)
+        filepath = os.path.join(myarg.disk_path,myarg.op_path,name,exday,f"{name}_{exday}.csv.png")
+
+        if not os.path.exists(targetpath):
+            os.makedirs(targetpath)
+
+        updateReport(filepath,target=targetpath)        
+
+
 if __name__ == "__main__":
 
     today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
@@ -80,6 +93,6 @@ if __name__ == "__main__":
     
     target = myarg.DailyReprotPath 
     updateReport(reportName,target)
-
+    updatepic()
 
 

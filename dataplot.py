@@ -86,11 +86,20 @@ def genpicture(name,exday,path):
 
     try:
         data = pd.read_csv(path)
-    except:
+    except Exception as e:
         print(f'{path} plot figure fail\n')
 
-    ydata = [data['Dex'],data['Gex'],data['putIV']-data['CallIV']]
-    date  = data['Date']
+    # 取得資料筆數
+    num_records = data.shape[0]
+
+    # 如果資料筆數超過30筆，只保留最近的30筆
+    if num_records > 30:
+        recent_data = data.tail(30)
+    else:
+        recent_data = data  # 如果不足30筆，則使用所有資料
+
+    ydata = [recent_data['Dex'], recent_data['Gex'], recent_data['putIV'] - recent_data['CallIV']]
+    date = recent_data['Date']
     title = name + ' ' + exday
     plot = DATAPLOT(3,ydata,date,title,path)
 

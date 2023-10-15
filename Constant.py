@@ -28,7 +28,7 @@ backup_path = 'BackUp'
 
 DailyReprotPath = '/home/ponder/migoogledrive/Stock/Daily/'
 
-daliy_picture   = "DailyReprot/picture"
+daliy_picture   = "/home/ponder/migoogledrive/Stock/Daily/picture/"
 
 Debug     = True
 
@@ -38,6 +38,33 @@ def getToday(offset = 0):
     current = datetime.now()
     current = current - timedelta(hours=offset)
     return current
+
+def find_third_friday(input_date,name):
+    # 轉換輸入日期為datetime物件
+    input_date = datetime.strptime(input_date, '%Y-%m-%d')
+    
+    # 找出這個月的第一天
+    first_day_of_month = datetime(input_date.year, input_date.month, 1)
+    
+    # 找出這個月的第一個星期五
+    first_friday = first_day_of_month + timedelta(days=(4 - first_day_of_month.weekday() + 7) % 7)
+    
+    # 找出這個月的第三週的星期五
+    third_friday = first_friday + timedelta(days=14)
+    
+    # 比較輸入日期是否超過第三週的星期五，如果超過則加一個月
+    if input_date > third_friday:
+        next_month = input_date.replace(day=1) + timedelta(days=32)  # 加一個月
+        first_day_of_next_month = datetime(next_month.year, next_month.month, 1)
+        first_friday = first_day_of_next_month + timedelta(days=(4 - first_day_of_next_month.weekday() + 7) % 7)
+        third_friday = first_friday + timedelta(days=14)
+    
+    if name == "^Vix":
+        ans_day = third_friday - timedelta(days=2)
+    else:
+        ans_day = third_friday
+
+    return ans_day.strftime('%Y-%m-%d')
 
 class IOTool:
     def __init__(self) -> None:
