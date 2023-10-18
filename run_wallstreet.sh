@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+#set -e
 
 DL_Log="/media/ponder/ADATA HM900/Log/download_log.txt"
 op_Log="/media/ponder/ADATA HM900/Log/opcal_log.txt"
