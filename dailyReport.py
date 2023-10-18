@@ -4,6 +4,7 @@ import Constant as myarg
 import datetime 
 import shutil
 import dataplot
+import sys
 
 def list_subdirectories(path):
     subdirectories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path,d))]
@@ -80,19 +81,25 @@ def updatepic():
 
         updateReport(filepath,target=targetpath)        
 
+        print('remove picture')
+        os.remove(filepath)
 
 if __name__ == "__main__":
 
-    today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
-    reportName = 'Report_' + today + '.xlsx' 
-    reportName = os.path.join(myarg.disk_path,myarg.db_path,reportName)
+    try:
+        today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
+        reportName = 'Report_' + today + '.xlsx' 
+        reportName = os.path.join(myarg.disk_path,myarg.db_path,reportName)
 
-    wexcel = pd.ExcelWriter(reportName,engine = 'xlsxwriter')
-    report(wexcel,reportName)
-    wexcel._save()
+        wexcel = pd.ExcelWriter(reportName,engine = 'xlsxwriter')
+        report(wexcel,reportName)
+        wexcel._save()
     
-    target = myarg.DailyReprotPath 
-    updateReport(reportName,target)
-    updatepic()
+        target = myarg.DailyReprotPath 
+        updateReport(reportName,target)
+        updatepic()
 
+    except Exception as e:
+        sys.exit(1)
 
+    sys.exit(0)
