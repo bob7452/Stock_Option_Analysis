@@ -76,7 +76,7 @@ def DownLoad_Index():
             'MMTH' : [marketdata[2]]
     })
 
-    filepath = os.path.join(myarg.disk_path,stock_path,"Index","Index.csv")
+    filepath = os.path.join(myarg.disk_path,myarg.stock_path,"Index","Index.csv")
    
     if os.path.exists(filepath):
         alldf = pd.read_csv(filepath)
