@@ -11,30 +11,34 @@ import tarfile
 def backup():
 
     today = myarg.getToday(myarg.offset_time).strftime("%Y-%m-%d")
-    opsourcefolder = os.path.join(myarg.disk_path,myarg.op_path)
-    stocksourcefolder = os.path.join(myarg.disk_path,myarg.stock_path)
-    targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,'data.tar.gz')
-    tmp_dir = '/tmp/backup_temp'
+    opsourcefolder = os.path.join(myarg.disk_path, myarg.op_path)
+    stocksourcefolder = os.path.join(myarg.disk_path, myarg.stock_path)
+    targetpath = os.path.join(myarg.disk_path,myarg.backup_path,today)
 
-    os.makedirs(tmp_dir)
+    if not os.path.exists(targetpath):
+        os.makedirs(targetpath)
 
-    shutil.copytree(opsourcefolder,os.path.join(tmp_dir,'StockPriceData'))
-    shutil.copytree(opsourcefolder,os.path.join(tmp_dir,'OptionData'))
+    op_archive_path = os.path.join(myarg.disk_path, myarg.backup_path, today, f"{myarg.op_path}.tar.gz")
+    print(f"Backing up files from {opsourcefolder} to {op_archive_path}")
+    with tarfile.open(op_archive_path, "w:gz") as tar:
+        tar.add(opsourcefolder, arcname=os.path.basename(myarg.op_path))
 
-    with tarfile.open(targetfolder,'w:gz') as tar:
-        tar.add(tmp_dir, arcname = os.path.basename(tmp_dir))
+    stock_archive_path = os.path.join(myarg.disk_path, myarg.backup_path, today, f"{myarg.stock_path}.tar.gz")
+    print(f"Backing up files from {stocksourcefolder} to {stock_archive_path}")
+    with tarfile.open(stock_archive_path, "w:gz") as tar:
+        tar.add(stocksourcefolder, arcname=os.path.basename(myarg.stock_path))
 
-    shutil.rmtree(tmp_dir)
+    # today = myarg.getToday(myarg.offset_time).strftime("%Y-%m-%d")
+    # opsourcefolder = os.path.join(myarg.disk_path,myarg.op_path)
+    # stocksourcefolder = os.path.join(myarg.disk_path,myarg.stock_path)
 
-    if os.path.exists(targetfolder):
-        return 0
-    else:
-        raise Exception(f"no file in {targetfolder}")
-#    print(f"Back File {opsourcefolder} to {targetfolder}")
-#    shutil.copytree(opsourcefolder,targetfolder)
-#    targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,myarg.stock_path)
-#    print(f"Back File {stocksourcefolder} to {targetfolder}")
-#    shutil.copytree(stocksourcefolder,targetfolder)
+    # targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,myarg.op_path)
+    # print(f"Back File {opsourcefolder} to {targetfolder}")
+    # shutil.copytree(opsourcefolder,targetfolder)
+    
+    # targetfolder = os.path.join(myarg.disk_path,myarg.backup_path,today,myarg.stock_path)
+    # print(f"Back File {stocksourcefolder} to {targetfolder}")
+    # shutil.copytree(stocksourcefolder,targetfolder)
 
 
 def list_subdirectories(path):
