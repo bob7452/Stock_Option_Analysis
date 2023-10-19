@@ -10,7 +10,9 @@ nyse = get_calendar('NYSE')
 is_holidays = nyse.valid_days(start_date=today, end_date=today)
 
 if is_holidays.empty:
+    print('plz enjoy ur holidays')
     sys.exit(1)
 else:
+    print('Fighting')
     sys.exit(0)
 
