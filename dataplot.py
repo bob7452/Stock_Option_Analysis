@@ -86,7 +86,7 @@ def genpicture(name,exday,path):
 
     try:
         data = pd.read_csv(path)
-    except:
+    except Exception as e:
         print(f'{path} plot figure fail\n')
 
     # 取得資料筆數

@@ -105,6 +105,7 @@ if __name__ == "__main__":
         backup()
         main()
     except Exception as e:
+        print(f'{e}')
         sys.exit(1)
         
     sys.exit(0)

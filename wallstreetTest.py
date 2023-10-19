@@ -31,7 +31,8 @@ if __name__ == "__main__":
             print(name + " " + sDLType + " " + Iterval)
             DownLoad.DownLoad_Data(name,DLType,dT,Iterval)
     
-    except:
+    except Exception as e:
+        print(f'Error Catch {e}')
         sys.exit(1)
     
     sys.exit(0)
