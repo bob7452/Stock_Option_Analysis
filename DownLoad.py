@@ -198,7 +198,7 @@ def DownLoad_Option(name,dT):
                 print("T",T)
                 print("dT",dT)
                 print("r",r)
-    
+            
             Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
             Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
             Theta  = round(calc.theta(S, K, V, T,r), 4)
@@ -232,19 +232,26 @@ def DownLoad_Option(name,dT):
         today = myarg.getToday(myarg.offset_time)
         today_date = today.strftime('%Y-%m-%d')
         Path = os.path.join(myarg.disk_path,myarg.op_path,name,exp_date,today_date,Type)
+       
+        if not os.path.exists(Path):
+            bNewContract = True
+            print('Catch New Contract')
+        else:
+            bNewContract = False
+            print('Contract already exists')
         
-        if updateDataOnly:
-            print('Update Last Night Data')
+        if updateDataOnly or bNewContract:
+            print('Update Data')
             savefile(allDF,Path)
         else:
             print('Update OI and Calulate Greeks')
+        
+            allDF.reset_index(drop=True, inplace=True)
+            
             originData = pd.read_csv(Path)
+            originData.reset_index(drop=True, inplace=True)
+
             originData['OI'] = allDF['OI']
-            originData['Theo Price'] = allDF['Theo Price']
-            originData['Delta'] = allDF['Delta']
-            originData['Gamma'] = allDF['Gamma']
-            originData['Theta'] = allDF['Theta']
-            originData['Vega']  = allDF['Vega']
             savefile(originData,Path)
         print("")
 
