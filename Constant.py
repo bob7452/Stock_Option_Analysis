@@ -42,7 +42,8 @@ def getToday(offset = 0):
 def find_third_friday(input_date,name):
     # 轉換輸入日期為datetime物件
     input_date = datetime.strptime(input_date, '%Y-%m-%d')
-    
+    print(f'input date {input_date}')
+
     # 找出這個月的第一天
     first_day_of_month = datetime(input_date.year, input_date.month, 1)
     
@@ -51,6 +52,11 @@ def find_third_friday(input_date,name):
     
     # 找出這個月的第三週的星期五
     third_friday = first_friday + timedelta(days=14)
+    print(f'third_friday {third_friday}')
+    
+    if name == "^Vix":
+        third_friday = third_friday - timedelta(days=2)
+        print(f'^Vix {third_friday}')
     
     # 比較輸入日期是否超過第三週的星期五，如果超過則加一個月
     if input_date > third_friday:
@@ -58,11 +64,14 @@ def find_third_friday(input_date,name):
         first_day_of_next_month = datetime(next_month.year, next_month.month, 1)
         first_friday = first_day_of_next_month + timedelta(days=(4 - first_day_of_next_month.weekday() + 7) % 7)
         third_friday = first_friday + timedelta(days=14)
+        print(f'Go On Next Month {third_friday}')
     
     if name == "^Vix":
         ans_day = third_friday - timedelta(days=2)
+        print(f'^Vix {ans_day}')
     else:
         ans_day = third_friday
+        print(f'others {ans_day}')
 
     return ans_day.strftime('%Y-%m-%d')
 

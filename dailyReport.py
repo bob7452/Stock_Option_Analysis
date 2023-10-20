@@ -68,7 +68,7 @@ def updateReport(source,target):
     shutil.copy(source,target)
 
 def updatepic():
-    today = myarg.getToday().strftime('%Y-%m-%d')
+    today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
     stocklist = myarg.Stock
     
     for name in stocklist:
@@ -76,6 +76,7 @@ def updatepic():
         targetpath = os.path.join(myarg.daliy_picture,exday)
         filepath = os.path.join(myarg.disk_path,myarg.op_path,name,exday,f"{name}_{exday}.csv.png")
 
+        print(f'path {filepath}')
         if not os.path.exists(targetpath):
             os.makedirs(targetpath)
 
