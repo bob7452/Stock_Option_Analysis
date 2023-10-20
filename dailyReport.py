@@ -81,8 +81,8 @@ def updatepic():
 
         updateReport(filepath,target=targetpath)        
 
-        print('remove picture')
-        os.remove(filepath)
+        #print('remove picture')
+        #os.remove(filepath)
 
 if __name__ == "__main__":
 
