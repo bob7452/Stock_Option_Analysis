@@ -150,7 +150,13 @@ def DownLoad_Option(name,dT):
     ## Option Value 
     S = current_stock_price 
     r = Rate.riskfree() / 100
-    
+   
+    # Time < 12
+    current_hour = datetime.now()
+    if current_hour < 12:
+        updateDataOnly = True
+    else:
+        updateDataOnly = False
 
     for index,exp_date in enumerate(options):
         option_chain = ticker.option_chain(options[index])
@@ -193,12 +199,12 @@ def DownLoad_Option(name,dT):
                 print("dT",dT)
                 print("r",r)
     
-
-            Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
-            Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
-            Theta  = round(calc.theta(S, K, V, T,r), 4)
-            Vega   = round(calc.vega(S, K, V, T,r), 4)
-            Gamma  = round(calc.gamma(S, K, V, T,r), 4)
+            if not updateDataOnly:
+                Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
+                Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
+                Theta  = round(calc.theta(S, K, V, T,r), 4)
+                Vega   = round(calc.vega(S, K, V, T,r), 4)
+                Gamma  = round(calc.gamma(S, K, V, T,r), 4)
 
             data = { 'Date'  : [exp_date],
                     'CurrentPrice' : [S],
@@ -227,7 +233,19 @@ def DownLoad_Option(name,dT):
         today = myarg.getToday(myarg.offset_time)
         today_date = today.strftime('%Y-%m-%d')
         Path = os.path.join(myarg.disk_path,myarg.op_path,name,exp_date,today_date,Type)
-        savefile(allDF,Path)
+        
+        if updateDataOnly:
+            print('Update Last Night Data')
+            savefile(allDF,Path)
+        else:
+            print('Update OI and Calulate Greeks')
+            originData = pd.read_csv(Path)
+            originData['OI'] = allDF['OI']
+            originData['Theo Price'] = allDF['Theo Price']
+            originData['Delta'] = allDF['Delta']
+            originData['Gamma'] = allDF['Gamma']
+            originData['Vega']  = allDF['Vega']
+        
         print("")
 
         print("========================================")
