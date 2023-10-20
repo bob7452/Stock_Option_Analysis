@@ -152,7 +152,7 @@ def DownLoad_Option(name,dT):
     r = Rate.riskfree() / 100
    
     # Time < 12
-    current_hour = datetime.now()
+    current_hour = datetime.now().hour
     if current_hour < 12:
         updateDataOnly = True
     else:
@@ -243,6 +243,7 @@ def DownLoad_Option(name,dT):
             originData['Theo Price'] = allDF['Theo Price']
             originData['Delta'] = allDF['Delta']
             originData['Gamma'] = allDF['Gamma']
+            originData['Theta'] = allDF['Theta']
             originData['Vega']  = allDF['Vega']
             savefile(originData,Path)
         print("")
