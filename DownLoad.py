@@ -199,12 +199,11 @@ def DownLoad_Option(name,dT):
                 print("dT",dT)
                 print("r",r)
     
-            if updateDataOnly == False:
-                Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
-                Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
-                Theta  = round(calc.theta(S, K, V, T,r), 4)
-                Vega   = round(calc.vega(S, K, V, T,r), 4)
-                Gamma  = round(calc.gamma(S, K, V, T,r), 4)
+            Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
+            Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
+            Theta  = round(calc.theta(S, K, V, T,r), 4)
+            Vega   = round(calc.vega(S, K, V, T,r), 4)
+            Gamma  = round(calc.gamma(S, K, V, T,r), 4)
 
             data = { 'Date'  : [exp_date],
                     'CurrentPrice' : [S],
