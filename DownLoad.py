@@ -199,7 +199,7 @@ def DownLoad_Option(name,dT):
                 print("dT",dT)
                 print("r",r)
     
-            if not updateDataOnly:
+            if updateDataOnly == False:
                 Theo   = round(calc.theo(S, K, V, T, dT,r), 4)
                 Delta  = round(calc.delta(S, K, V, T, dT,r), 4)
                 Theta  = round(calc.theta(S, K, V, T,r), 4)
@@ -245,7 +245,7 @@ def DownLoad_Option(name,dT):
             originData['Delta'] = allDF['Delta']
             originData['Gamma'] = allDF['Gamma']
             originData['Vega']  = allDF['Vega']
-        
+            savefile(originData,Path)
         print("")
 
         print("========================================")
