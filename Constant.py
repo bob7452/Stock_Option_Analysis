@@ -6,7 +6,7 @@ import pandas as pd
 Stock = ["QQQ","SPY","DIA","IWM",     \
          "AAPL","MSFT","GOOG","META", \
          "AMZN","TSLA","NVDA","TLT",  \
-         "^Vix","SMH","^SPX","ARKK",  \
+         "^Vix","SMH","NFLX","ARKK",  \
          "AMD","JPM", "U","XLB",      \
          "BITO","XLE","XHB","XLP",    \
          "XLV","XLU","XLI","XBI",     \
