@@ -32,9 +32,15 @@ daliy_picture   = "/home/ponder/migoogledrive/Stock/Daily/picture/"
 
 Debug     = True
 
-offset_time = 27
+offset_time = 28
 
 def getToday(offset = 0): 
+    today = datetime.date.today()
+    day_of_week = today.weekday()
+
+    if day_of_week == 0:
+        offset = 76
+
     current = datetime.now()
     current = current - timedelta(hours=offset)
     return current
