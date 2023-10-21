@@ -5,6 +5,7 @@ import maxpain as mp
 import pandas  as pd
 from datetime import datetime
 import shutil
+import dataplot
 
 def backup():
 
@@ -89,6 +90,33 @@ def main():
             savefile(alldf,filepath)
             alldf  = pd.DataFrame()
 
+def _modifyPic():
+
+    watchlist  = myarg.Stock
+    alldf      = pd.DataFrame()
+    for name in watchlist:
+        path1  = os.path.join(myarg.disk_path,myarg.op_path,name)
+
+        if not os.path.exists(path1) :
+            print("report not exist")
+            continue
+
+        exDays = list_subdirectories(path1)
+
+        for exDay in exDays: 
+            path2 = os.path.join(path1,exDay)  
+            sourcepath = path2
+        
+            reportName = os.path.join(sourcepath,f'{name}_{exDay}.csv')
+            print(f'Report {reportName}')
+            if not os.path.exists(reportName) :
+                print("report not exist")
+                continue
+
+            dataplot.genpicture(name,exDay,reportName)
+            
+
+
 def _modifystock():
 
     watchlist  = myarg.Stock
@@ -142,6 +170,8 @@ def _modifystock():
 
 
 if __name__ == "__main__":
-    backup()
+#    backup()
 #    _modifystock()
-    main()
+#    main()
+    _modifyPic()   
+   

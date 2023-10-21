@@ -88,7 +88,8 @@ def genpicture(name,exday,path):
         data = pd.read_csv(path)
     except Exception as e:
         print(f'{path} plot figure fail\n')
-
+        return
+    
     # 取得資料筆數
     num_records = data.shape[0]
 
@@ -98,7 +99,7 @@ def genpicture(name,exday,path):
     else:
         recent_data = data  # 如果不足30筆，則使用所有資料
 
-    ydata = [recent_data['Dex'], recent_data['Gex'], recent_data['putIV'] - recent_data['CallIV']]
+    ydata = [recent_data['Dex'], recent_data['Gex'], recent_data['puttotalIV'] - recent_data['CalltotalIV']]
     date = recent_data['Date']
     title = name + ' ' + exday
     plot = DATAPLOT(3,ydata,date,title,path)
