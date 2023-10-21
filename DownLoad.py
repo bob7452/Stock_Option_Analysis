@@ -81,6 +81,7 @@ def DownLoad_Index():
     if os.path.exists(filepath):
         alldf = pd.read_csv(filepath)
         alldf = pd.concat([alldf,data])
+        alldf.to_csv(filepath,index=False)
     else:
         data.to_csv(filepath,index=False)
 
