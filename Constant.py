@@ -40,10 +40,16 @@ def getToday(offset = 0):
 
     current = datetime.now()
     day_of_week = current.weekday()
-    
+    current_hour = current.hour
+
     print(f'today is week {day_of_week+1}')
     if day_of_week == 0:
         offset = 76
+
+    print(f'time is {current_hour}:00')
+    if current_hour < 12 :
+        print('operation save data mission')
+        offset = 16
 
     current = current - timedelta(hours=offset)
     return current
