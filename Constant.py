@@ -42,6 +42,8 @@ def getToday(offset = 0):
     day_of_week = current.weekday()
     current_hour = current.hour
 
+    print(f'current time {current}')
+
     print(f'today is week {day_of_week+1}')
     if day_of_week == 0:
         offset = 76
@@ -52,6 +54,8 @@ def getToday(offset = 0):
         offset = 16
 
     current = current - timedelta(hours=offset)
+    print(f'current time shift {offset} : {current}')
+
     return current
 
 def find_third_friday(input_date,name):
