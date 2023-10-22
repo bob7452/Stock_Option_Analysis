@@ -142,8 +142,8 @@ def main(callpath,putpath,debug=0):
     maindf , subdf = CalPain(mainList,subList,isCall)
     strikePrice , min_loss  = sumPain(maindf,subdf,debug)
 
-    callKeySum = sumKeyData(calldata)
-    putKeySum  = sumKeyData(putdata)
+#    callKeySum = sumKeyData(calldata)
+#    putKeySum  = sumKeyData(putdata)
     Gex        = calGex(calldata,putdata)
     Dex        = calDex(calldata,putdata)
     recday     = recdays(callpath)
@@ -152,28 +152,30 @@ def main(callpath,putpath,debug=0):
 
     c_mean_iv  = sum_iv_filter(calldata,callLen,"Middle-Filter")
     p_mean_iv  = sum_iv_filter(putdata,putLen,"Middle-Filter")
+    price = calldata['CurrentPrice'][0]
 
     #KEYS = ['Delta','Gamma','Theta','Vega','IV','OI','volume']
     data = { 'Date'       : [recday],
+             'Price'      : [price],
              'MaxPainStrike' : [strikePrice], 
              'Gex'        : [Gex],
              'Dex'        : [Dex],
-             'CallDelta'  : [callKeySum[0]],
-             'CallGamma'  : [callKeySum[1]],
-             'CallTheta'  : [callKeySum[2]],
-             'CallVega'   : [callKeySum[3]],
-             'CallIV'     : [callKeySum[4]],
-             'CallOI'     : [callKeySum[5]],
-             'Callvolume' : [callKeySum[6]],
+#             'CallDelta'  : [callKeySum[0]],
+#             'CallGamma'  : [callKeySum[1]],
+#             'CallTheta'  : [callKeySum[2]],
+#             'CallVega'   : [callKeySum[3]],
+#             'CallIV'     : [callKeySum[4]],
+#             'CallOI'     : [callKeySum[5]],
+#             'Callvolume' : [callKeySum[6]],
              'CallMeanIV' : [c_mean_iv],
              'CalltotalIV': [c_total_iv],
-             'putDelta'   : [putKeySum[0]],
-             'putGamma'   : [putKeySum[1]],
-             'putTheta'   : [putKeySum[2]],
-             'putVega'    : [putKeySum[3]],
-             'putIV'      : [putKeySum[4]],
-             'putOI'      : [putKeySum[5]],
-             'putvolume'  : [putKeySum[6]],
+#             'putDelta'   : [putKeySum[0]],
+#             'putGamma'   : [putKeySum[1]],
+#             'putTheta'   : [putKeySum[2]],
+#             'putVega'    : [putKeySum[3]],
+#             'putIV'      : [putKeySum[4]],
+#             'putOI'      : [putKeySum[5]],
+#             'putvolume'  : [putKeySum[6]],
              'putMeanIV'  : [p_mean_iv],
              'puttotalIV' : [p_total_iv],
             }

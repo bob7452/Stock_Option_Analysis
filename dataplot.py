@@ -6,6 +6,8 @@ import yfinance as yf
 
 class DATAPLOT:
     __Key = [
+            'Price',
+            'Price Chg($)',
             'DEX',
             'GEX',
             'P-C IV'
@@ -46,11 +48,29 @@ class DATAPLOT:
             color = self.__Color[index%2]
             # 繪製 data1 柱狀圖（上面的子圖）
     
-            ax.bar(self.__date,data,color=color,label = name)
-            ax.axhline(y=maxBoundary, color='#ff0000', linestyle='--', label=f'{name} Upper Bound {round(maxBoundary,2)}')
-            ax.axhline(y=minBoundary, color='g', linestyle='--', label=f'{name} Lower Bound {round(minBoundary,2)}') 
-            ax.set_ylabel(f'Value ({name})')
-            ax.legend(loc='upper left')
+            if index == 0:
+                ax.plot(self.__date,data,color='black')#,label = name)
+                dinx = 0
+                for diff, price in zip(self.__data_y_list[1],data):
+                    if diff >= 0 :
+                        ax.plot(self.__date[dinx],price,marker='o',markerfacecolor='g', markeredgecolor='g')#,label = name)
+                    else:
+                        ax.plot(self.__date[dinx],price,marker='o',markerfacecolor='r', markeredgecolor='r')#,label = name)
+                    dinx = dinx + 1
+
+            elif index == 1:
+                colors = ['green' if x >= 0 else 'red' for x in data]
+                ax.bar(self.__date,data,color=colors)#,label = name)
+                
+            else:
+                ax.bar(self.__date,data,color=color)#,label = name)
+
+            if index > 1:
+                ax.axhline(y=maxBoundary, color='#ff0000', linestyle='--')#, label=f'{name} Upper Bound {round(maxBoundary,2)}')
+                ax.axhline(y=minBoundary, color='g', linestyle='--')#, label=f'{name} Lower Bound {round(minBoundary,2)}') 
+            
+            ax.set_ylabel(f'{name}')
+            #ax.legend(loc='upper left')
             ax.grid(True)
 
             if index != self.__subSize - 1:  # Hide x-axis labels for all subplots except the last one
@@ -64,7 +84,7 @@ class DATAPLOT:
         plt.suptitle(str(self.__title), fontsize=16)
 
         # 顯示圖表
-        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        #plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         plt.savefig(str(self.__path)+'.png',dpi = 300)
         #plt.show()
 
@@ -98,11 +118,16 @@ def genpicture(name,exday,path):
         recent_data = data.tail(30)
     else:
         recent_data = data  # 如果不足30筆，則使用所有資料
+    
+    price = recent_data['Price']
+    print(price)
+    price = price.diff().fillna(0)
+    print(price)
 
-    ydata = [recent_data['Dex'], recent_data['Gex'], recent_data['puttotalIV'] - recent_data['CalltotalIV']]
+    ydata = [recent_data['Price'],price,recent_data['Dex'], recent_data['Gex'], recent_data['puttotalIV'] - recent_data['CalltotalIV']]
     date = recent_data['Date']
     title = name + ' ' + exday
-    plot = DATAPLOT(3,ydata,date,title,path)
+    plot = DATAPLOT(5,ydata,date,title,path)
 
     plot._Plot()
     

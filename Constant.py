@@ -35,13 +35,16 @@ Debug     = True
 offset_time = 28
 
 def getToday(offset = 0): 
-    today = datetime.date.today()
-    day_of_week = today.weekday()
+    #today = datetime.date.today()
+    #day_of_week = today.weekday()
 
+    current = datetime.now()
+    day_of_week = current.weekday()
+    
+    print(f'today is week {day_of_week+1}')
     if day_of_week == 0:
         offset = 76
 
-    current = datetime.now()
     current = current - timedelta(hours=offset)
     return current
 

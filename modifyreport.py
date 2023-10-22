@@ -50,6 +50,9 @@ def main():
     alldf      = pd.DataFrame()
     for name in watchlist:
         path1  = os.path.join(myarg.disk_path,myarg.op_path,name)
+        if not os.path.exists(path1):
+            continue
+
         exDays = list_subdirectories(path1)
 
         for exDay in exDays: 
