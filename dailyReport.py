@@ -77,6 +77,10 @@ def updatepic():
         filepath = os.path.join(myarg.disk_path,myarg.op_path,name,exday,f"{name}_{exday}.csv.png")
 
         print(f'path {filepath}')
+
+        if not os.path.exists(filepath):
+            continue
+
         if not os.path.exists(targetpath):
             os.makedirs(targetpath)
 
