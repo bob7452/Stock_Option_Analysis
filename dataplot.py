@@ -46,23 +46,17 @@ class DATAPLOT:
             minBoundary = dataMin[index]
             name = self.__Key[index]
             color = self.__Color[index%2]
-            # 繪製 data1 柱狀圖（上面的子圖）
     
-            print(f'data shape {data.shape[0]}')
-            print(f'Date shape {self.__date.shape[0]}')
-
             if index == 0:
                 print(f'index {index}')
                 ax.plot(self.__date,data,color='black')#,label = name)
                 dinx = 0
-                print(f'data list 1 : {self.__data_y_list[1]}')
-                #for diff, price in zip(self.__data_y_list[1],data):
-                #    print(f' diff[{dinx} : {diff} / price[{dinx}] : {price}]')
-                #    if diff >= 0 :
-                #        ax.plot(self.__date[dinx],price,marker='o',markerfacecolor='g', markeredgecolor='g')#,label = name)
-                #    else:
-                #        ax.plot(self.__date[dinx],price,marker='o',markerfacecolor='r', markeredgecolor='r')#,label = name)
-                #    dinx = dinx + 1
+                for diff, price in zip(self.__data_y_list[1],data):
+                    if diff >= 0 :
+                        ax.plot(self.__date.iloc[dinx],price,marker='o',markerfacecolor='g', markeredgecolor='g')#,label = name)
+                    else:
+                        ax.plot(self.__date.iloc[dinx],price,marker='o',markerfacecolor='r', markeredgecolor='r')#,label = name)
+                    dinx = dinx + 1
 
             elif index == 1:
                 print(f'index {index}')
@@ -79,7 +73,6 @@ class DATAPLOT:
                 ax.axhline(y=minBoundary, color='g', linestyle='--')#, label=f'{name} Lower Bound {round(minBoundary,2)}') 
             
             ax.set_ylabel(f'{name}')
-            #ax.legend(loc='upper left')
             ax.grid(True)
 
             if index != self.__subSize - 1:  # Hide x-axis labels for all subplots except the last one
@@ -129,14 +122,10 @@ def genpicture(name,exday,path):
         recent_data = data  # 如果不足30筆，則使用所有資料
     
     price = data['Price']
-    print(price)
     price = price.diff().fillna(0)
-    print(price)
     
     if num_records > 30:
         price = price.tail(30)
-        print(price)
-        print(price.shape[0])
 
     ydata = [recent_data['Price'],price,recent_data['Dex'], recent_data['Gex'], recent_data['puttotalIV'] - recent_data['CalltotalIV']]
     date = recent_data['Date']
