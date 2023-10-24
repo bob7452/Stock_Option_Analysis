@@ -49,7 +49,8 @@ def report(wexcel,reportName):
                 except Exception as e:
                     print(f"open file fail {e}")
                     continue
-                
+               
+                print(f'filepath : {filepath}')
                 dataplot.genpicture(stockname,exday,filepath)
             else:
                 continue
