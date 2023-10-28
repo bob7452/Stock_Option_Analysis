@@ -63,6 +63,13 @@ def MarketBreath():
     return data
 
 def DownLoad_Index():
+
+    # Time < 12
+    current_hour = datetime.now().hour
+    if current_hour < 12:
+        print('only save option iv , index data skip save')
+        return 0
+
     greendata = GreenIndex()
     marketdata = MarketBreath()
     
