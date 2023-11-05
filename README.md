@@ -4,7 +4,6 @@ Todo:
 
 1. MYSQL
 2. MarketBreath
-3. Visual Tools
-4. Alternative Source 
-
+3. RS
+4. Stock Scanner
 
