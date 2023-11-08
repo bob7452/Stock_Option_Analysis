@@ -85,12 +85,12 @@ def find_third_friday(input_date,name):
         third_friday = first_friday + timedelta(days=14)
         print(f'Go On Next Month {third_friday}')
     
-    if name == "^Vix":
-        ans_day = third_friday - timedelta(days=2)
-        print(f'^Vix {ans_day}')
-    else:
-        ans_day = third_friday
-        print(f'others {ans_day}')
+        if name == "^Vix":
+            third_friday = third_friday - timedelta(days=2)
+            print(f'^Vix {third_friday}')
+    
+    ans_day = third_friday
+    print(f'day {ans_day}')
 
     return ans_day.strftime('%Y-%m-%d')
 
