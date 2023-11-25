@@ -2,17 +2,25 @@ import sys
 from pandas_market_calendars import get_calendar
 import Constant as myarg
 
-today = myarg.getToday(myarg.offset_time)
-today = today.strftime('%Y-%m-%d')
-nyse = get_calendar('NYSE')
+def isholidays():
+    today = myarg.getToday(myarg.offset_time)
+    today = today.strftime('%Y-%m-%d')
+    nyse = get_calendar('NYSE')
+    
+    
+    is_holidays = nyse.valid_days(start_date=today, end_date=today)
 
+    if is_holidays.empty:
+        print('plz enjoy ur holidays')
+        return 1
+    else:
+        print('Fighting')
+        return 0
 
-is_holidays = nyse.valid_days(start_date=today, end_date=today)
+if __name__ == "__main__":
+    ans = isholidays()
 
-if is_holidays.empty:
-    print('plz enjoy ur holidays')
-    sys.exit(1)
-else:
-    print('Fighting')
-    sys.exit(0)
-
+    if ans:
+        sys.exit(1)
+    else:
+        sys.exit(0)

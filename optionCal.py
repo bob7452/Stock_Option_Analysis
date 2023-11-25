@@ -7,6 +7,7 @@ from datetime import datetime
 import shutil
 import sys
 import tarfile
+from isHoliday import isholidays
 
 def backup():
 
@@ -105,6 +106,12 @@ def main():
             alldf  = pd.DataFrame()
 
 if __name__ == "__main__":
+    
+    ans = isholidays()
+
+    if ans:
+        sys.exit(1)
+    
     try:
         backup()
         main()

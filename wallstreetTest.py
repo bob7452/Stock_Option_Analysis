@@ -1,9 +1,15 @@
 import sys
 import DownLoad 
 from Constant import Stock,Type
+from isHoliday import isholidays 
 
 
 if __name__ == "__main__":
+
+    ans = isholidays()
+
+    if ans:
+        sys.exit(1)
 
     try:
         if len(sys.argv) < 4:

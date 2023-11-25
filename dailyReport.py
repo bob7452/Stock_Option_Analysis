@@ -5,6 +5,7 @@ import datetime
 import shutil
 import dataplot
 import sys
+from isHoliday import isholidays
 
 def list_subdirectories(path):
     subdirectories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path,d))]
@@ -91,6 +92,11 @@ def updatepic():
         #os.remove(filepath)
 
 if __name__ == "__main__":
+    
+    ans = isholidays()
+
+    if ans:
+        sys.exit(1)
 
     try:
         today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
