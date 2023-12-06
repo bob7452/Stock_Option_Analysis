@@ -58,7 +58,10 @@ def savefile(df,FilePath):
     else:
         try:
             temp = pd.read_csv(FilePath)
-            temp = pd.concat([temp,df])
+            if temp['Date'].iloc[-1] == df['Date'].iloc[-1]:
+                temp.iloc[-1] = df.iloc[-1]
+            else:
+                temp = pd.concat([temp,df])
             temp.to_csv(FilePath,index=False)
         except pd.errors.EmptyDataError:
             df.to_csv(FilePath,index = False)
