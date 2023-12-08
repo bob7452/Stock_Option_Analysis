@@ -73,6 +73,7 @@ def updatepic():
     today = myarg.getToday(myarg.offset_time).strftime('%Y-%m-%d')
     stocklist = myarg.Stock
     
+    # find this month
     for name in stocklist:
         exday = myarg.find_third_friday(today,name)
         targetpath = os.path.join(myarg.daliy_picture,exday)
@@ -88,8 +89,21 @@ def updatepic():
 
         updateReport(filepath,target=targetpath)        
 
-        #print('remove picture')
-        #os.remove(filepath)
+    # find next month 
+    for name in stocklist:
+        exday = myarg.find_next_third_friday(today,name)
+        targetpath = os.path.join(myarg.daliy_picture,exday)
+        filepath = os.path.join(myarg.disk_path,myarg.op_path,name,exday,f"{name}_{exday}.csv.png")
+
+        print(f'path {filepath}')
+
+        if not os.path.exists(filepath):
+            continue
+
+        if not os.path.exists(targetpath):
+            os.makedirs(targetpath)
+
+        updateReport(filepath,target=targetpath)        
 
 if __name__ == "__main__":
     

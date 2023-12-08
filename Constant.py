@@ -94,6 +94,17 @@ def find_third_friday(input_date,name):
 
     return ans_day.strftime('%Y-%m-%d')
 
+def find_next_third_friday(input_date,name):
+    print("find next third friday")
+    ans_day = find_third_friday(input_date,name)
+    ans_day = datetime.strptime(ans_day,'%Y-%m-%d')
+    ans_day = ans_day+timedelta(days=1)
+    print(f"ans friday {ans_day}")
+    ans_day = ans_day.strftime('%Y-%m-%d')
+    ans_day = find_third_friday(ans_day,name)
+
+    return ans_day
+
 class IOTool:
     def __init__(self) -> None:
         pass
