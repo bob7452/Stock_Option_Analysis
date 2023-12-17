@@ -77,7 +77,7 @@ def DownLoad_Index():
     today_date = today.strftime('%Y-%m-%d')
 
     data = pd.DataFrame({'Date' : [today_date],
-            'Fear Green Value': [greendata.value],
+            'Fear' : [greendata.value],
             'MMTW' : [marketdata[0]],
             'MMFI' : [marketdata[1]],
             'MMTH' : [marketdata[2]]
