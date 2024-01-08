@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 
 urls = [ 'https://www.barchart.com/stocks/quotes/$MMTW',
 	'https://www.barchart.com/stocks/quotes/$MMFI',
-	'https://www.barchart.com/stocks/quotes/$MMTH'
+	'https://www.barchart.com/stocks/quotes/$MMOH',
+	'https://www.barchart.com/stocks/quotes/$MMTH',
 	]
 
 headers = {

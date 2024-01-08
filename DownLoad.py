@@ -76,11 +76,19 @@ def DownLoad_Index():
     today = myarg.getToday(myarg.offset_time)
     today_date = today.strftime('%Y-%m-%d')
 
+    
+    ticker = yf.Ticker("SPY")
+    ticker_data = ticker.history(period="1d")
+    current_stock_price = ticker_data['Close'].iloc[0]
+
+
     data = pd.DataFrame({'Date' : [today_date],
+            'SPY'  : [current_stock_price],
             'Fear' : [greendata.value],
             'MMTW' : [marketdata[0]],
             'MMFI' : [marketdata[1]],
-            'MMTH' : [marketdata[2]]
+            'MMOH' : [marketdata[2]],
+            'MMTH' : [marketdata[3]]
     })
 
     filepath = os.path.join(myarg.disk_path,myarg.stock_path,"Index","Index.csv")
