@@ -6,6 +6,7 @@ import shutil
 import dataplot
 import sys
 from isHoliday import isholidays
+import matplotlib.pyplot as plt
 
 def list_subdirectories(path):
     subdirectories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path,d))]
@@ -105,6 +106,34 @@ def updatepic():
 
         updateReport(filepath,target=targetpath)        
 
+def update_index():
+    df = pd.read_csv("/media/ponder/ADATA HM900/StockPriceData/Index/Index.csv")
+    
+    df['Date'] = pd.to_datetime(df['Date'])
+    
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+    
+    ax1.plot(df['Date'], df['SPY'], label='SPY')
+    ax1.set_xlabel('Date')
+    ax1.set_ylabel('SPY Values')
+    ax1.legend()
+    
+    ax2.plot(df['Date'], df['Fear'], label='Fear')
+    ax2.plot(df['Date'], df['MMTW'], label='MMTW')
+    ax2.plot(df['Date'], df['MMFI'], label='MMFI')
+    ax2.plot(df['Date'], df['MMOH'], label='MMOH')
+    ax2.plot(df['Date'], df['MMTH'], label='MMTH')
+    ax2.set_xlabel('Date')
+    ax2.set_ylabel('Values')
+    ax2.legend()
+    
+    plt.suptitle('Stock Data')
+    
+    pic_path = '/media/ponder/ADATA HM900/StockPriceData/Index/index.png'
+    plt.savefig(pic_path,dpi = 300)
+
+    updateReport(pic_path,myarg.daliy_picture)
+
 if __name__ == "__main__":
     
     ans = isholidays()
@@ -124,6 +153,7 @@ if __name__ == "__main__":
         target = myarg.DailyReprotPath 
         updateReport(reportName,target)
         updatepic()
+        update_index()
 
     except Exception as e:
         sys.exit(1)
