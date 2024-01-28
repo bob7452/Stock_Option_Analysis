@@ -1,8 +1,8 @@
 #!/bin/bash
 
-op_dir="/media/ponder/ADATA HM900/OptionData"
-stock_dir="/media/ponder/ADATA HM900/StockPriceData"
-target_file="/media/ponder/ADATA HM900/BackUp/data.tar.gz"
+op_dir="/media/ponder/Disk_D/OptionData"
+stock_dir="/media/ponder/Disk_D/StockPriceData"
+target_file="/media/ponder/Disk_D/BackUp/data.tar.gz"
 google_dir="/home/ponder/migoogledrive/Stock"
 
 

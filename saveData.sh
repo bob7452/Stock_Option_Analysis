@@ -1,6 +1,6 @@
 #!bin/bash
 
-DL_Log="/media/ponder/ADATA HM900/Log/download_log.txt"
+DL_Log="/media/ponder/Disk_D/Log/download_log.txt"
 
 
 python_script="/home/ponder/Stock_Option_Analysis/wallstreetTest.py"

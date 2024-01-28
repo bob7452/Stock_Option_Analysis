@@ -16,7 +16,7 @@ Stock = ["QQQ","SPY","DIA","IWM",     \
 Type   = ["C","P"]
 OptionType = ["CALL","PUT"]
 
-disk_path = "/media/ponder/ADATA HM900/"
+disk_path = "/media/ponder/Disk_D"
 
 op_path   = 'OptionData'
 

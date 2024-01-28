@@ -107,7 +107,7 @@ def updatepic():
         updateReport(filepath,target=targetpath)        
 
 def update_index():
-    df = pd.read_csv("/media/ponder/ADATA HM900/StockPriceData/Index/Index.csv")
+    df = pd.read_csv("/media/ponder/Disk_D/StockPriceData/Index/Index.csv")
     
     df['Date'] = pd.to_datetime(df['Date'])
     
@@ -129,7 +129,7 @@ def update_index():
     
     plt.suptitle('Stock Data')
     
-    pic_path = '/media/ponder/ADATA HM900/StockPriceData/Index/index.png'
+    pic_path = '/media/ponder/Disk_D/StockPriceData/Index/index.png'
     plt.savefig(pic_path,dpi = 300)
 
     updateReport(pic_path,myarg.daliy_picture)
