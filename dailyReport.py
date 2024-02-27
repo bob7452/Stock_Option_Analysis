@@ -156,6 +156,7 @@ if __name__ == "__main__":
         update_index()
 
     except Exception as e:
+        print(f"{e}")
         sys.exit(1)
 
     sys.exit(0)
